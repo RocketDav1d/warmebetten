@@ -13,7 +13,7 @@ export function BerlinMap() {
     <Map
       center={BERLIN_CENTER}
       zoom={11.5}
-      minZoom={9}
+      minZoom={8}
       maxZoom={18}
       maxBounds={BERLIN_BOUNDS}
       dragRotate={false}
