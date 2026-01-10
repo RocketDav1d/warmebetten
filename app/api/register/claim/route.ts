@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { createAdminClient, hasServiceRoleKey } from "@/lib/supabase/admin";
+import { createAdminClient, getServiceRoleProblem } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 function normalizeEmail(email: string) {
@@ -40,12 +40,12 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!hasServiceRoleKey) {
+    const serviceRoleProblem = getServiceRoleProblem();
+    if (serviceRoleProblem) {
       return NextResponse.json(
         {
           status: "error",
-          message:
-            "Server misconfigured: missing SUPABASE_SERVICE_ROLE_KEY. Contact an admin.",
+          message: serviceRoleProblem,
         },
         { status: 500 },
       );

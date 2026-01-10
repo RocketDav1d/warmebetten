@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { createAdminClient, hasServiceRoleKey } from "@/lib/supabase/admin";
+import { createAdminClient, getServiceRoleProblem } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,7 +32,8 @@ async function AdminApplications() {
     redirect("/protected");
   }
 
-  if (!hasServiceRoleKey) {
+  const serviceRoleProblem = getServiceRoleProblem();
+  if (serviceRoleProblem) {
     return (
       <div className="flex-1 w-full flex flex-col gap-6">
         <Card>
@@ -45,9 +46,7 @@ async function AdminApplications() {
                 Server-Konfiguration fehlt
               </div>
               <div className="mt-1">
-                Setze <code>SUPABASE_SERVICE_ROLE_KEY</code> in{" "}
-                <code>.env.local</code> (Supabase Dashboard → Project Settings →
-                API → service_role key) und starte <code>bun run dev</code> neu.
+                {serviceRoleProblem}
               </div>
             </div>
           </CardContent>

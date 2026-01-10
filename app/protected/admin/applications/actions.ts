@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { createAdminClient, hasServiceRoleKey } from "@/lib/supabase/admin";
+import { createAdminClient, getServiceRoleProblem } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 export async function approveApplication(formData: FormData) {
@@ -27,11 +27,8 @@ export async function approveApplication(formData: FormData) {
     throw new Error("Not authorized");
   }
 
-  if (!hasServiceRoleKey) {
-    throw new Error(
-      "Missing SUPABASE_SERVICE_ROLE_KEY. Add it to .env.local and restart dev server.",
-    );
-  }
+  const serviceRoleProblem = getServiceRoleProblem();
+  if (serviceRoleProblem) throw new Error(serviceRoleProblem);
 
   const admin = createAdminClient();
   const { data: app, error: appErr } = await admin

@@ -101,6 +101,14 @@ Server-side endpoints require a Supabase service role key:
 
 - Set `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` (server-only).
 
+If you see `permission denied for schema public` on admin pages, you need GRANTs for the `service_role` DB role (it bypasses RLS, but still needs privileges). Run this once in Supabase SQL Editor:
+
+```sql
+grant usage on schema public to service_role;
+grant all on all tables in schema public to service_role;
+grant all on all sequences in schema public to service_role;
+```
+
 ## Tables
 
 - `public.unterkuenfte`

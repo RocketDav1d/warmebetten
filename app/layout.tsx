@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description:
     "Karte mit Unterkünften und Angeboten für obdachlose Menschen in Berlin.",
   icons: {
-    icon: "/icon.png",
-    apple: "/apple-icon.png",
+    icon: [{ url: "/icon?v=1", type: "image/png" }],
+    apple: [{ url: "/apple-icon?v=1", type: "image/png" }],
   },
 };
 

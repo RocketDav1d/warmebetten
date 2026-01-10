@@ -272,9 +272,13 @@ using (auth.uid() = id)
 with check (auth.uid() = id);
 
 -- Grants
-grant usage on schema public to anon, authenticated;
+grant usage on schema public to anon, authenticated, service_role;
 grant select on public.unterkuenfte to anon, authenticated;
 grant insert, update, delete on public.unterkuenfte to authenticated;
 grant select, update on public.profiles to authenticated;
+
+-- service_role (server-only) needs direct privileges too (it bypasses RLS, but still needs GRANTs).
+grant all on public.unterkuenfte to service_role;
+grant all on public.profiles to service_role;
 
 
