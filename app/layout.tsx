@@ -10,8 +10,13 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "warmebetten.berlin",
+  applicationName: "warmebetten.berlin",
   description:
     "Karte mit Unterkünften und Angeboten für obdachlose Menschen in Berlin.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
 };
 
 const geistSans = Geist({

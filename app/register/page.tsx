@@ -59,9 +59,9 @@ async function RegisterPageContent() {
           <CardHeader className="space-y-2">
             <CardTitle className="text-xl">Betreiber-Registrierung</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Wähle zuerst deine Unterkunft aus. Danach registrierst du dich. Wenn
-              deine Email für diese Unterkunft whitelisted ist, wird die Verbindung
-              direkt erstellt. Andernfalls landet deine Anfrage zur Freischaltung
+              Wenn du Betreiber bist: wähle zuerst deine Unterkunft aus und registriere dich
+              anschließend. Wenn deine Email für diese Unterkunft whitelisted ist, wird die
+              Verbindung direkt erstellt. Andernfalls landet deine Anfrage zur Freischaltung
               beim Admin.
             </p>
           </CardHeader>

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, hasServiceRoleKey } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,8 +21,8 @@ async function AdminApplications() {
   const user = userData.user;
   if (!user) redirect("/auth/login");
 
-  const admin = createAdminClient();
-  const { data: profile } = await admin
+  // Check admin role using the user-scoped client (no service role required for this).
+  const { data: profile } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
@@ -32,6 +32,31 @@ async function AdminApplications() {
     redirect("/protected");
   }
 
+  if (!hasServiceRoleKey) {
+    return (
+      <div className="flex-1 w-full flex flex-col gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">Admin: Freischaltungen</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+              <div className="font-medium text-foreground">
+                Server-Konfiguration fehlt
+              </div>
+              <div className="mt-1">
+                Setze <code>SUPABASE_SERVICE_ROLE_KEY</code> in{" "}
+                <code>.env.local</code> (Supabase Dashboard → Project Settings →
+                API → service_role key) und starte <code>bun run dev</code> neu.
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const admin = createAdminClient();
   const { data: apps, error } = await admin
     .from("unterkunft_applications")
     .select(

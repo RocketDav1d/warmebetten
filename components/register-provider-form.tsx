@@ -43,9 +43,7 @@ export function RegisterProviderForm({ shelters }: { shelters: ShelterRow[] }) {
 
     setIsLoading(true);
     try {
-      const next = `/register/claim?unterkunftId=${encodeURIComponent(
-        selectedId,
-      )}`;
+      const next = `/register/claim?unterkunftId=${encodeURIComponent(selectedId)}`;
       const emailRedirectTo = `${window.location.origin}/auth/confirm?next=${encodeURIComponent(
         next,
       )}`;

@@ -6,6 +6,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FiltersPanel } from "@/components/map/filters-panel";
 import { ProviderActions } from "@/components/map/provider-actions";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function LeftIsland() {
   return (
@@ -34,10 +35,24 @@ export function LeftIsland() {
 
         <section className="space-y-3">
           <div className="text-sm font-semibold">Login</div>
-          <Suspense fallback={<div className="text-sm text-muted-foreground">Lade…</div>}>
+          <Suspense
+            fallback={
+              <div className="flex gap-2">
+                <Skeleton className="h-8 w-24" />
+                <Skeleton className="h-8 w-28" />
+              </div>
+            }
+          >
             <AuthButton />
           </Suspense>
-          <Suspense>
+          <Suspense
+            fallback={
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+            }
+          >
             <ProviderActions />
           </Suspense>
         </section>

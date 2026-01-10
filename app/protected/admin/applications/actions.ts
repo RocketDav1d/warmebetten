@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, hasServiceRoleKey } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 export async function approveApplication(formData: FormData) {
@@ -16,8 +16,8 @@ export async function approveApplication(formData: FormData) {
   const user = userData.user;
   if (!user) redirect("/auth/login");
 
-  const admin = createAdminClient();
-  const { data: profile } = await admin
+  // Role check using user-scoped client.
+  const { data: profile } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
@@ -27,6 +27,13 @@ export async function approveApplication(formData: FormData) {
     throw new Error("Not authorized");
   }
 
+  if (!hasServiceRoleKey) {
+    throw new Error(
+      "Missing SUPABASE_SERVICE_ROLE_KEY. Add it to .env.local and restart dev server.",
+    );
+  }
+
+  const admin = createAdminClient();
   const { data: app, error: appErr } = await admin
     .from("unterkunft_applications")
     .select("id,unterkunft_id,user_id,status")

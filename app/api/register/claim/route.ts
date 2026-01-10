@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, hasServiceRoleKey } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 function normalizeEmail(email: string) {
@@ -37,6 +37,17 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { status: "error", message: "Missing user email" },
         { status: 400 },
+      );
+    }
+
+    if (!hasServiceRoleKey) {
+      return NextResponse.json(
+        {
+          status: "error",
+          message:
+            "Server misconfigured: missing SUPABASE_SERVICE_ROLE_KEY. Contact an admin.",
+        },
+        { status: 500 },
       );
     }
 
