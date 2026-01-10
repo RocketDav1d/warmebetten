@@ -3,9 +3,9 @@ import { Suspense } from "react";
 
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FiltersPanel } from "@/components/map/filters-panel";
+import { ProviderActions } from "@/components/map/provider-actions";
 
 export function LeftIsland() {
   return (
@@ -37,15 +37,9 @@ export function LeftIsland() {
           <Suspense fallback={<div className="text-sm text-muted-foreground">Lade…</div>}>
             <AuthButton />
           </Suspense>
-          <p className="text-xs text-muted-foreground">
-            Betreiber können Kapazitäten (z.B. freie Betten) und aktuelle Angebote aktualisieren.
-          </p>
-          <Button asChild variant="outline" size="sm" className="w-full">
-            <Link href="/register">Registrieren (Betreiber)</Link>
-          </Button>
-          <Button asChild className="w-full">
-            <Link href="/protected">Kapazität verwalten</Link>
-          </Button>
+          <Suspense>
+            <ProviderActions />
+          </Suspense>
         </section>
       </CardContent>
 

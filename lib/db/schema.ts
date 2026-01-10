@@ -31,6 +31,18 @@ export const berlinBezirkEnum = pgEnum("berlin_bezirk", [
   "reinickendorf",
 ]);
 
+export const unterkunftTypEnum = pgEnum("unterkunft_typ", [
+  "notuebernachtung",
+  "nachtcafe",
+  "tagesangebote",
+  "essen_verpflegung",
+  "medizinische_hilfen",
+  "suchtangebote",
+  "beratung",
+  "hygiene",
+  "kleiderkammer",
+]);
+
 export const unterkuenfte = pgTable(
   "unterkuenfte",
   {
@@ -46,6 +58,7 @@ export const unterkuenfte = pgTable(
     ownerUserId: uuid("owner_user_id"),
 
     bezirk: berlinBezirkEnum("bezirk"),
+    typ: unterkunftTypEnum("typ"),
     name: text("name").notNull(),
     adresse: text("adresse").notNull(),
     strasse: text("strasse"),

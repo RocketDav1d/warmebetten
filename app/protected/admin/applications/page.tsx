@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -6,7 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { approveApplication } from "./actions";
 
-export default async function AdminApplicationsPage() {
+export default function AdminApplicationsPage() {
+  return (
+    <Suspense fallback={<div className="text-sm text-muted-foreground">Laden…</div>}>
+      <AdminApplications />
+    </Suspense>
+  );
+}
+
+async function AdminApplications() {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   const user = userData.user;

@@ -38,7 +38,18 @@ bun run supabase -- db push
 
 If `supabase` says "command not found", **do not** run `supabase ...` directly—use the `bun run supabase -- ...` form above (it picks up `node_modules/.bin`).
 
-## Drizzle ORM (no hand-written SQL going forward)
+## Drizzle ORM vs Supabase migrations (source of truth)
+
+This repo currently uses **both**:
+
+- `supabase/migrations/*`: authoritative for the **Supabase database** (tables + RLS/policies/triggers/grants).
+- `lib/db/schema.ts`: authoritative for the **app's table model + types** (Drizzle ORM).
+- `drizzle/*`: generated SQL migrations from `lib/db/schema.ts` (useful for local DBs or if you decide to let Drizzle manage your Supabase DB schema).
+
+### Recommendation (practical)
+
+- If your production DB is Supabase: **apply `supabase/migrations/*`** (Dashboard SQL editor or `supabase db push`) and keep `lib/db/schema.ts` in sync.
+- Only use **Drizzle `db:migrate` against the Supabase DB** if you intentionally want Drizzle to manage schema changes there. In that case, baseline correctly first (see below) and be aware that Supabase RLS/policies/triggers are *not* expressed in Drizzle by default.
 
 Drizzle is configured for:
 
@@ -70,6 +81,12 @@ bun run db:studio
 
 Important note about Supabase RLS:
 - If `DATABASE_URL` uses the `postgres` user, it can bypass RLS. Keep using `@supabase/supabase-js` for user-scoped operations that rely on RLS.
+
+### Baselining Drizzle against an existing Supabase schema
+
+If you created your DB via `supabase/migrations/*` and later want to use Drizzle migrations (`db:migrate`) against the same database, you must **baseline** Drizzle so it doesn't try to re-create existing tables.
+
+This repo includes `scripts/db_baseline_drizzle.mjs`, but note it baselines to the **latest local migration** (whatever is currently in `drizzle/meta/_journal.json`). If you run it *after* generating new migrations, it can accidentally baseline past them (so they won't run).
 
 If you see errors like `EHOSTUNREACH ... 2a05:...:5432`, that's usually IPv6 connectivity. The `db:*` scripts are configured to prefer IPv4.
 

@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 import { hasEnvVars } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RegisterProviderForm } from "@/components/register-provider-form";
 
-export default async function RegisterPage() {
+export default function RegisterPage() {
   if (!hasEnvVars) {
     return (
       <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
@@ -35,6 +36,14 @@ export default async function RegisterPage() {
     );
   }
 
+  return (
+    <Suspense fallback={<div className="text-sm text-muted-foreground">Laden…</div>}>
+      <RegisterPageContent />
+    </Suspense>
+  );
+}
+
+async function RegisterPageContent() {
   const supabase = await createClient();
 
   const { data: shelters, error } = await supabase
