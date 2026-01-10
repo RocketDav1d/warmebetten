@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Any, Iterable, Type
 
@@ -105,7 +106,18 @@ def main() -> None:
     parser.add_argument("--out", default="shelters.structured.json")
     parser.add_argument("--start-page", type=int, default=4, help="1-indexed, inclusive")
     parser.add_argument("--end-page", type=int, default=24, help="1-indexed, inclusive")
-    parser.add_argument("--min-page-chars", type=int, default=200, help="Skip pages with less extracted text")
+    parser.add_argument("--min-page-chars", type=int, default=0, help="Skip pages with less extracted text")
+    parser.add_argument("--max-output-tokens", type=int, default=8000)
+    parser.add_argument(
+        "--dump-page-text-dir",
+        default=None,
+        help="If set, write extracted page text to files (page_4.txt, ...).",
+    )
+    parser.add_argument(
+        "--only-dump-pages",
+        action="store_true",
+        help="If set, do not call OpenAI; only dump/log per-page extracted text.",
+    )
     parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"])
     args = parser.parse_args()
 
@@ -127,16 +139,43 @@ def main() -> None:
 
     logger.info("Processing pages %s..%s (inclusive)", start, end)
 
+    dump_dir: Path | None = None
+    if args.dump_page_text_dir:
+        dump_dir = Path(args.dump_page_text_dir)
+        dump_dir.mkdir(parents=True, exist_ok=True)
+        logger.info("Dumping extracted page text to: %s", dump_dir)
+
     merged: list[dict] = []
     called = 0
     skipped = 0
 
     for page_no in range(start, end + 1):
-        logger.info("Page %s/%s", page_no, end)
+        logger.info("Page %s/%s (range %s..%s)", page_no, len(pages), start, end)
         page_text = (pages[page_no - 1] or "").strip()
+        logger.info("Page %s: extracted text chars=%s", page_no, len(page_text))
+
+        if dump_dir is not None:
+            (dump_dir / f"page_{page_no}.txt").write_text(page_text, encoding="utf-8")
+
+        # Heuristics to help decide whether the issue is PDF extraction vs LLM extraction
+        # NOTE: avoid \\b because PDF icon glyphs can break word-boundary detection
+        phone_like = re.findall(r"0\\d{2,4}\\s*(?:/|\\s)\\s*\\d[\\d\\s]{4,}", page_text)
+        emails = re.findall(r"[\\w.+'-]+@[\\w.-]+\\.[A-Za-z]{2,}", page_text)
+        urls = re.findall(r"(?:https?://\\S+|www\\.\\S+)", page_text)
+        logger.info(
+            "Page %s: signals phones=%s emails=%s urls=%s",
+            page_no,
+            len(phone_like),
+            len(emails),
+            len(urls),
+        )
+
         if len(page_text) < args.min_page_chars:
             logger.info("Skipping page %s (only %s chars)", page_no, len(page_text))
             skipped += 1
+            continue
+
+        if args.only_dump_pages:
             continue
 
         called += 1
@@ -147,15 +186,22 @@ def main() -> None:
             user_text=f"PAGE {page_no}\n\n{page_text}",
             system_prompt=DEFAULT_SYSTEM_PROMPT + "\n\nExtrahiere nur Unterkünfte, die auf DIESER Seite stehen. Leere Liste ist erlaubt.",
             model=args.model,
+            max_output_tokens=args.max_output_tokens,
         )
 
         parsed_dict = _to_jsonable(parsed)
         entries = _as_list(parsed_dict, "unterkuenfte")
         logger.info("Page %s: extracted %s unterkuenfte", page_no, len(entries))
+        for i, e in enumerate(entries, start=1):
+            logger.info("Page %s shelter %s: %s | %s | %s", page_no, i, e.get("name"), e.get("adresse"), e.get("telefon"))
         merged.extend(entries)
 
     merged = _dedupe_entries(merged)
     logger.info("Calls made: %s | pages skipped: %s | merged unique unterkuenfte: %s", called, skipped, len(merged))
+
+    if args.only_dump_pages:
+        logger.info("only-dump-pages enabled: not calling OpenAI and not writing merged JSON output.")
+        return
 
     # Write a single merged object matching the schema (no extra fields).
     final_obj = schema_cls.model_validate({"unterkuenfte": merged}) if hasattr(schema_cls, "model_validate") else schema_cls.parse_obj({"unterkuenfte": merged})  # type: ignore[attr-defined]
