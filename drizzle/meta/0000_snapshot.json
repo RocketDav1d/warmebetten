@@ -1,0 +1,414 @@
+{
+  "id": "100a9838-f31e-474d-b6e4-80f108c2937e",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.profiles": {
+      "name": "profiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "user_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'public'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.unterkuenfte": {
+      "name": "unterkuenfte",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "owner_user_id": {
+          "name": "owner_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bezirk": {
+          "name": "bezirk",
+          "type": "berlin_bezirk",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "adresse": {
+          "name": "adresse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "strasse": {
+          "name": "strasse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lat": {
+          "name": "lat",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lng": {
+          "name": "lng",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "u_bahn_station": {
+          "name": "u_bahn_station",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "s_bahn_station": {
+          "name": "s_bahn_station",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bus": {
+          "name": "bus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "telefon": {
+          "name": "telefon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "website": {
+          "name": "website",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verantwortliche_personen": {
+          "name": "verantwortliche_personen",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'"
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "oeffnung_von": {
+          "name": "oeffnung_von",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "oeffnung_bis": {
+          "name": "oeffnung_bis",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "letzter_einlass": {
+          "name": "letzter_einlass",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kaelte_waerme_bus_kann_kommen_von": {
+          "name": "kaelte_waerme_bus_kann_kommen_von",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kaelte_waerme_bus_kann_kommen_bis": {
+          "name": "kaelte_waerme_bus_kann_kommen_bis",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "keine_drogen": {
+          "name": "keine_drogen",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "keine_tiere": {
+          "name": "keine_tiere",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "keine_gewalt": {
+          "name": "keine_gewalt",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "bietet_dusche": {
+          "name": "bietet_dusche",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "bietet_essen": {
+          "name": "bietet_essen",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "bietet_betreuung": {
+          "name": "bietet_betreuung",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "bietet_kleidung": {
+          "name": "bietet_kleidung",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "bietet_medizin": {
+          "name": "bietet_medizin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "behindertengerecht": {
+          "name": "behindertengerecht",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "kapazitaet_max_allgemein": {
+          "name": "kapazitaet_max_allgemein",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "kapazitaet_max_frauen": {
+          "name": "kapazitaet_max_frauen",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "kapazitaet_max_maenner": {
+          "name": "kapazitaet_max_maenner",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "plaetze_frei_aktuell": {
+          "name": "plaetze_frei_aktuell",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "kapazitaet_belegt": {
+          "name": "kapazitaet_belegt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "generated": {
+            "as": "greatest(kapazitaet_max_allgemein - plaetze_frei_aktuell, 0)",
+            "type": "stored"
+          }
+        },
+        "plaetze_frei": {
+          "name": "plaetze_frei",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "generated": {
+            "as": "plaetze_frei_aktuell",
+            "type": "stored"
+          }
+        },
+        "betten_frei": {
+          "name": "betten_frei",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "generated": {
+            "as": "(plaetze_frei_aktuell > 0)",
+            "type": "stored"
+          }
+        }
+      },
+      "indexes": {
+        "unterkuenfte_lat_lng_idx": {
+          "name": "unterkuenfte_lat_lng_idx",
+          "columns": [
+            {
+              "expression": "lat",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "lng",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "unterkuenfte_owner_user_id_idx": {
+          "name": "unterkuenfte_owner_user_id_idx",
+          "columns": [
+            {
+              "expression": "owner_user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.berlin_bezirk": {
+      "name": "berlin_bezirk",
+      "schema": "public",
+      "values": [
+        "mitte",
+        "friedrichshain_kreuzberg",
+        "pankow",
+        "charlottenburg_wilmersdorf",
+        "spandau",
+        "steglitz_zehlendorf",
+        "tempelhof_schoeneberg",
+        "neukoelln",
+        "treptow_koepenick",
+        "marzahn_hellersdorf",
+        "lichtenberg",
+        "reinickendorf"
+      ]
+    },
+    "public.user_role": {
+      "name": "user_role",
+      "schema": "public",
+      "values": [
+        "public",
+        "provider",
+        "admin"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

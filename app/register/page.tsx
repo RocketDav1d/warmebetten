@@ -1,0 +1,81 @@
+import Link from "next/link";
+
+import { createClient } from "@/lib/supabase/server";
+import { hasEnvVars } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RegisterProviderForm } from "@/components/register-provider-form";
+
+export default async function RegisterPage() {
+  if (!hasEnvVars) {
+    return (
+      <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
+        <div className="w-full max-w-3xl space-y-4">
+          <Card>
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-xl">Betreiber-Registrierung</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+                Supabase ist noch nicht konfiguriert. Setze{" "}
+                <code>NEXT_PUBLIC_SUPABASE_URL</code> und{" "}
+                <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code> (oder{" "}
+                <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>) in{" "}
+                <code>.env.local</code>.
+              </div>
+            </CardContent>
+          </Card>
+          <div className="text-xs text-muted-foreground">
+            Zurück zur Karte:{" "}
+            <Link className="underline underline-offset-4" href="/">
+              warmebetten.berlin
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const supabase = await createClient();
+
+  const { data: shelters, error } = await supabase
+    .from("unterkuenfte")
+    .select("id,name,adresse,bezirk")
+    .is("owner_user_id", null)
+    .order("name", { ascending: true });
+
+  return (
+    <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
+      <div className="w-full max-w-3xl space-y-4">
+        <Card>
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-xl">Betreiber-Registrierung</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Wähle zuerst deine Unterkunft aus. Danach registrierst du dich. Wenn
+              deine Email für diese Unterkunft whitelisted ist, wird die Verbindung
+              direkt erstellt. Andernfalls landet deine Anfrage zur Freischaltung
+              beim Admin.
+            </p>
+          </CardHeader>
+          <CardContent>
+            {error ? (
+              <div className="text-sm text-red-600">
+                Fehler beim Laden der Unterkünfte: {error.message}
+              </div>
+            ) : (
+              <RegisterProviderForm shelters={shelters ?? []} />
+            )}
+          </CardContent>
+        </Card>
+
+        <div className="text-xs text-muted-foreground">
+          Zurück zur Karte:{" "}
+          <Link className="underline underline-offset-4" href="/">
+            warmebetten.berlin
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
