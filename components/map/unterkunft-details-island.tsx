@@ -127,7 +127,7 @@ export function UnterkunftDetailsIsland({
           </div>
         )}
 
-        {(unterkunft.telefon || unterkunft.email || unterkunft.website) && (
+        {(unterkunft.telefon?.length || unterkunft.email?.length || unterkunft.website) && (
           <div className="space-y-2">
             <div className="text-sm font-semibold">Kontakt</div>
             <div className="space-y-1 text-sm text-muted-foreground">

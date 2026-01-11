@@ -4,48 +4,41 @@ import { useMemo } from "react";
 
 import { MapMarker, MarkerContent, MarkerTooltip } from "@/components/ui/map";
 import { cn } from "@/lib/utils";
+import type { Database } from "@/lib/supabase/database.types";
 
-export type UnterkunftTyp =
-  | "notuebernachtung"
-  | "nachtcafe"
-  | "tagesangebote"
-  | "essen_verpflegung"
-  | "medizinische_hilfen"
-  | "suchtangebote"
-  | "beratung"
-  | "hygiene"
-  | "kleiderkammer"
-  | null;
+type UnterkunftRow = Database["public"]["Tables"]["unterkuenfte"]["Row"];
 
-export type UnterkunftForMap = {
-  id: string;
-  name: string;
-  adresse: string;
-  bezirk: string | null;
-  typ: UnterkunftTyp;
-  lat: number | null;
-  lng: number | null;
-  betten_frei: boolean | null;
-  plaetze_frei: number | null;
-  plaetze_frei_aktuell: number | null;
-  telefon: string[] | null;
-  email: string[] | null;
-  website: string | null;
-  oeffnung_von: string | null;
-  oeffnung_bis: string | null;
-  letzter_einlass: string | null;
-  bietet_dusche: boolean | null;
-  bietet_essen: boolean | null;
-  bietet_betreuung: boolean | null;
-  bietet_kleidung: boolean | null;
-  bietet_medizin: boolean | null;
-  behindertengerecht: boolean | null;
-};
+export type UnterkunftForMap = Pick<
+  UnterkunftRow,
+  | "id"
+  | "name"
+  | "adresse"
+  | "bezirk"
+  | "typ"
+  | "lat"
+  | "lng"
+  | "betten_frei"
+  | "plaetze_frei"
+  | "plaetze_frei_aktuell"
+  | "telefon"
+  | "email"
+  | "website"
+  | "oeffnung_von"
+  | "oeffnung_bis"
+  | "letzter_einlass"
+  | "bietet_dusche"
+  | "bietet_essen"
+  | "bietet_betreuung"
+  | "bietet_kleidung"
+  | "bietet_medizin"
+  | "behindertengerecht"
+>;
 
-const TYPE_META: Record<
-  Exclude<UnterkunftTyp, null>,
-  { label: string; emoji: string; color: string }
-> = {
+type UnterkunftTyp = UnterkunftRow["typ"];
+type UnterkunftTypKey = Database["public"]["Enums"]["unterkunft_typ"];
+
+const TYPE_META: Record<UnterkunftTypKey, { label: string; emoji: string; color: string }> =
+  {
   notuebernachtung: { label: "Notübernachtung", emoji: "🛏️", color: "#6366f1" }, // indigo
   nachtcafe: { label: "Nachtcafé", emoji: "☕️", color: "#f59e0b" }, // amber
   tagesangebote: { label: "Tagesangebote", emoji: "☀️", color: "#eab308" }, // yellow
@@ -58,7 +51,7 @@ const TYPE_META: Record<
 };
 
 function getTypeMeta(typ: UnterkunftTyp) {
-  if (typ && TYPE_META[typ]) return TYPE_META[typ];
+  if (typ) return TYPE_META[typ];
   return { label: "Unterkunft", emoji: "📍", color: "#64748b" }; // slate
 }
 

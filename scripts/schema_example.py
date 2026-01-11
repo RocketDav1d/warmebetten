@@ -71,7 +71,7 @@ class Unterkunft(BaseModel):
 
     # contact / public info
     telefon: list[str] | None = None
-    email: str | None = None
+    email: list[str] | None = None
     website: str | None = None
     verantwortliche_personen: list[str] | None = None
     metadata: str | None = None

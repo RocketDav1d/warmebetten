@@ -4,12 +4,14 @@ import { redirect } from "next/navigation";
 
 import { createAdminClient, getServiceRoleProblem } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
+import { Constants } from "@/lib/supabase/database.types";
 
 type Payload = {
-  typ?: string;
+  typ?: unknown;
   name?: string;
   adresse?: string;
-  bezirk?: string;
+  bezirk?: unknown;
   lat?: number;
   lng?: number;
   strasse?: string | null;
@@ -40,6 +42,23 @@ type Payload = {
   kapazitaet_max_maenner?: number;
   plaetze_frei_aktuell?: number;
 };
+
+type UnterkunftTyp = Database["public"]["Enums"]["unterkunft_typ"];
+type BerlinBezirk = Database["public"]["Enums"]["berlin_bezirk"];
+
+function normalizeUnterkunftTyp(value: unknown): UnterkunftTyp | null {
+  if (typeof value !== "string") return null;
+  return (Constants.public.Enums.unterkunft_typ as readonly string[]).includes(value)
+    ? (value as UnterkunftTyp)
+    : null;
+}
+
+function normalizeBezirk(value: unknown): BerlinBezirk | null {
+  if (typeof value !== "string") return null;
+  return (Constants.public.Enums.berlin_bezirk as readonly string[]).includes(value)
+    ? (value as BerlinBezirk)
+    : null;
+}
 
 export async function approveSubmission(formData: FormData) {
   const submissionId = formData.get("submissionId");
@@ -102,13 +121,16 @@ export async function approveSubmission(formData: FormData) {
         ? [payload.email.trim()]
         : [];
 
+  const typ = normalizeUnterkunftTyp(payload.typ);
+  const bezirk = normalizeBezirk(payload.bezirk);
+
   const { data: shelter, error: shelterErr } = await admin
     .from("unterkuenfte")
     .insert({
-      typ: payload.typ ?? null,
+      typ,
       name: payload.name,
       adresse: payload.adresse,
-      bezirk: payload.bezirk ?? null,
+      bezirk,
       lat: payload.lat,
       lng: payload.lng,
       strasse: payload.strasse ?? null,

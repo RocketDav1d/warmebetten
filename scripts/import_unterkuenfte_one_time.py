@@ -49,7 +49,11 @@ def _dedupe(entries: Iterable[dict]) -> list[dict]:
     for e in entries:
         name = str(e.get("name") or "").strip().lower()
         adresse = str(e.get("adresse") or "").strip().lower()
-        telefon = str(e.get("telefon") or "").strip().lower()
+        telefon_raw = e.get("telefon")
+        if isinstance(telefon_raw, list):
+            telefon = ",".join(sorted(str(t).strip().lower() for t in telefon_raw if str(t).strip()))
+        else:
+            telefon = str(telefon_raw or "").strip().lower()
         key = "|".join([name, adresse, telefon]).strip("|")
         if not key:
             out.append(e)
@@ -83,6 +87,26 @@ def _normalize_pg_time(value: Any) -> str | None:
     if not (0 <= h <= 23 and 0 <= mm <= 59 and 0 <= ss <= 59):
         return None
     return f"{h:02d}:{mm:02d}:{ss:02d}"
+
+
+def _normalize_text_array(value: Any) -> list[str] | None:
+    """
+    Normalize values for Postgres `text[]` columns (e.g. telefon/email).
+    Returns None to indicate "omit field" (so DB defaults apply).
+    """
+    if value is None:
+        return None
+    if isinstance(value, list):
+        arr = [str(x).strip() for x in value if str(x).strip()]
+        return arr or None
+
+    s = str(value).strip()
+    if not s:
+        return None
+
+    # allow simple "a, b; c" lists from extraction
+    parts = [p.strip() for p in re.split(r"[;,]", s) if p.strip()]
+    return parts or None
 
 
 def geocode_photon(*, q: str, bbox: str = BERLIN_BBOX, limit: int = 6, timeout_s: int = 20) -> tuple[float, float] | None:
@@ -212,9 +236,25 @@ def _build_insert_row(
             if t is not None:
                 row[k] = t
             continue
+        if k in {"telefon", "email"}:
+            arr = _normalize_text_array(v)
+            if arr is not None:
+                row[k] = arr
+            continue
         if k == "verantwortliche_personen":
             if isinstance(v, list):
-                row[k] = [str(x) for x in v if str(x).strip()]
+                row[k] = [str(x).strip() for x in v if str(x).strip()]
+            elif isinstance(v, str) and v.strip():
+                row[k] = [v.strip()]
+            continue
+        if k == "metadata":
+            # DB column is text; if extraction gives structured JSON, serialize.
+            if isinstance(v, (dict, list)):
+                row[k] = json.dumps(v, ensure_ascii=False)
+            else:
+                s = str(v).strip()
+                if s:
+                    row[k] = s
             continue
         row[k] = v
 
@@ -268,7 +308,11 @@ def main() -> None:
     for idx, e in enumerate(entries, start=1):
         name = str(e.get("name") or "").strip()
         adresse = str(e.get("adresse") or "").strip()
-        telefon = str(e.get("telefon") or "").strip()
+        telefon_raw = e.get("telefon")
+        if isinstance(telefon_raw, list):
+            telefon = ", ".join(str(t).strip() for t in telefon_raw if str(t).strip())
+        else:
+            telefon = str(telefon_raw or "").strip()
         if not name or not adresse:
             logger.warning("Skipping %s/%s (missing name/adresse): name=%r adresse=%r", idx, len(entries), name, adresse)
             skipped += 1
