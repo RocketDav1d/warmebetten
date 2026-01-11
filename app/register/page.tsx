@@ -6,6 +6,7 @@ import { hasEnvVars } from "@/lib/utils";
 import type { BerlinBezirk } from "@/lib/unterkunft/meta";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { RegisterProviderForm } from "@/components/register-provider-form";
 
 export default function RegisterPage() {
@@ -39,9 +40,40 @@ export default function RegisterPage() {
   }
 
   return (
-    <Suspense fallback={<div className="text-sm text-muted-foreground">Laden…</div>}>
+    <Suspense fallback={<RegisterPageSkeleton />}>
       <RegisterPageContent />
     </Suspense>
+  );
+}
+
+function RegisterPageSkeleton() {
+  return (
+    <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
+      <div className="w-full max-w-3xl space-y-4">
+        <Card>
+          <CardHeader className="space-y-2">
+            <Skeleton className="h-6 w-64" />
+            <Skeleton className="h-4 w-full max-w-xl" />
+            <Skeleton className="h-4 w-full max-w-2xl" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between gap-3">
+              <Skeleton className="h-4 w-72" />
+              <Skeleton className="h-8 w-44" />
+            </div>
+            <div className="space-y-3">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-xs text-muted-foreground">
+          <Skeleton className="h-3 w-40" />
+        </div>
+      </div>
+    </div>
   );
 }
 
