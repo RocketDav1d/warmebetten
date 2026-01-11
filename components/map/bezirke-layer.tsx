@@ -225,12 +225,55 @@ export function BezirkeLayer({ selectedBezirke }: { selectedBezirke: BerlinBezir
       }
     };
 
-    const onMove = (e: any) => {
-      const f = e?.features?.[0];
-      const id = f?.id as string | number | undefined;
+    const isMarkerOrPopupAtPoint = (clientX: number, clientY: number) => {
+      const el = document.elementFromPoint(clientX, clientY);
+      if (!(el instanceof Element)) return false;
+      return Boolean(el.closest(".maplibregl-marker, .maplibregl-popup"));
+    };
+
+    // We intentionally handle hover using queryRenderedFeatures so that moving onto
+    // popup DOM overlays doesn't cause hover state to clear/flicker.
+    let clearTimer: number | null = null;
+    const cancelClear = () => {
+      if (clearTimer != null) {
+        window.clearTimeout(clearTimer);
+        clearTimer = null;
+      }
+    };
+
+    const onMapMouseMove = (e: any) => {
+      const oe = e?.originalEvent as MouseEvent | undefined;
+      if (oe && isMarkerOrPopupAtPoint(oe.clientX, oe.clientY)) {
+        return; // keep current hover stable while interacting with marker/popup
+      }
+
+      // Small radius query to avoid flicker on borders / slight geometry inaccuracies.
+      const p = e.point;
+      const r = 6;
+      const features = map.queryRenderedFeatures(
+        [
+          [p.x - r, p.y - r],
+          [p.x + r, p.y + r],
+        ],
+        { layers: [FILL_ID] }
+      );
+      const id = (features?.[0]?.id as string | number | undefined) ?? null;
       map.getCanvas().style.cursor = id != null ? "pointer" : "";
 
-      if (id == null) return;
+      if (id == null) {
+        // Don't clear immediately; gives a bit of hysteresis when crossing markers/borders fast.
+        cancelClear();
+        clearTimer = window.setTimeout(() => {
+          map.getCanvas().style.cursor = "";
+          setHoverId((prev) => {
+            setHoverState(prev, false);
+            return null;
+          });
+        }, 120);
+        return;
+      }
+
+      cancelClear();
       setHoverId((prev) => {
         if (prev === id) return prev;
         setHoverState(prev, false);
@@ -239,7 +282,10 @@ export function BezirkeLayer({ selectedBezirke }: { selectedBezirke: BerlinBezir
       });
     };
 
-    const onLeave = () => {
+    const onContainerLeave = (ev: MouseEvent) => {
+      // If we leave the container into a popup/marker (rare, but safe), don't clear.
+      if (isMarkerOrPopupAtPoint(ev.clientX, ev.clientY)) return;
+      cancelClear();
       map.getCanvas().style.cursor = "";
       setHoverId((prev) => {
         setHoverState(prev, false);
@@ -247,16 +293,17 @@ export function BezirkeLayer({ selectedBezirke }: { selectedBezirke: BerlinBezir
       });
     };
 
-    map.on("mousemove", FILL_ID, onMove);
-    map.on("mouseleave", FILL_ID, onLeave);
+    map.on("mousemove", onMapMouseMove);
+    map.getContainer()?.addEventListener("mouseleave", onContainerLeave);
 
     return () => {
       try {
-        map.off("mousemove", FILL_ID, onMove);
-        map.off("mouseleave", FILL_ID, onLeave);
+        map.off("mousemove", onMapMouseMove);
       } catch {
         // ignore
       }
+      cancelClear();
+      map.getContainer()?.removeEventListener("mouseleave", onContainerLeave);
       map.getCanvas().style.cursor = "";
     };
   }, [map, isLoaded]);
