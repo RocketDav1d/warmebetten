@@ -11,8 +11,9 @@ import { Label } from "@/components/ui/label";
 type ShelterRow = {
   id: string;
   name: string;
-  adresse: string;
+  adresse: string | null;
   bezirk: string | null;
+  is_mobile?: boolean;
 };
 
 export function RegisterProviderForm({ shelters }: { shelters: ShelterRow[] }) {
@@ -98,7 +99,9 @@ export function RegisterProviderForm({ shelters }: { shelters: ShelterRow[] }) {
                       />
                     </td>
                     <td className="p-2 align-top font-medium">{s.name}</td>
-                    <td className="p-2 align-top">{s.adresse}</td>
+                    <td className="p-2 align-top">
+                      {s.is_mobile ? "Mobil" : s.adresse ?? "—"}
+                    </td>
                     <td className="p-2 align-top">{s.bezirk ?? "—"}</td>
                   </tr>
                 ))}

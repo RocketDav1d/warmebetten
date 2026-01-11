@@ -22,7 +22,10 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import requests
+try:
+    import requests
+except ModuleNotFoundError:  # pragma: no cover
+    requests = None  # type: ignore
 
 # Allow running as module or directly
 try:
@@ -42,7 +45,13 @@ logger = logging.getLogger("create_email_whitelist")
 
 def get_supabase_config() -> tuple[str, str]:
     """Load Supabase URL and service role key from env."""
-    load_dotenv()
+    # scripts/.env is a convenience; allow running with env vars already set.
+    try:
+        load_dotenv()
+    except FileNotFoundError:  # pragma: no cover
+        pass
+    except PermissionError:  # pragma: no cover
+        pass
     url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
     key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     if not url or not key:
@@ -57,11 +66,15 @@ def fetch_unterkuenfte_with_emails(url: str, key: str) -> list[dict[str, Any]]:
     Fetch all unterkuenfte that have at least one email.
     Returns list of {id, email} where email is string[].
     """
+    if requests is None:
+        raise RuntimeError(
+            "Missing dependency: requests. Install requirements.txt (or pip install requests)."
+        )
     endpoint = f"{url}/rest/v1/unterkuenfte"
     params = {
         "select": "id,email",
-        # Filter: email is not null (Supabase uses neq.null for array/jsonb)
-        "email": "not.is.null",
+        # Filter: email array is not empty. (Avoid scanning every row when email defaults to '{}'.)
+        "email": "not.eq.{}",
     }
     headers = {
         "apikey": key,
@@ -78,6 +91,10 @@ def fetch_existing_whitelist(url: str, key: str) -> set[tuple[str, str]]:
     Fetch all existing (unterkunft_id, email) pairs from whitelist.
     Returns a set of tuples for fast lookup.
     """
+    if requests is None:
+        raise RuntimeError(
+            "Missing dependency: requests. Install requirements.txt (or pip install requests)."
+        )
     endpoint = f"{url}/rest/v1/unterkunft_email_whitelist"
     params = {"select": "unterkunft_id,email"}
     headers = {
@@ -98,6 +115,10 @@ def insert_whitelist_records(
     Insert whitelist records via Supabase REST API.
     records: list of {unterkunft_id, email}
     """
+    if requests is None:
+        raise RuntimeError(
+            "Missing dependency: requests. Install requirements.txt (or pip install requests)."
+        )
     endpoint = f"{url}/rest/v1/unterkunft_email_whitelist"
     headers = {
         "apikey": key,

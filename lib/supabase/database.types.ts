@@ -40,7 +40,7 @@ export type Database = {
       }
       unterkuenfte: {
         Row: {
-          adresse: string
+          adresse: string | null
           behindertengerecht: boolean
           betten_frei: boolean | null
           bezirk: Database["public"]["Enums"]["berlin_bezirk"] | null
@@ -55,6 +55,7 @@ export type Database = {
           created_by: string | null
           email: string[] | null
           id: string
+          is_mobile: boolean
           kaelte_waerme_bus_kann_kommen_bis: string | null
           kaelte_waerme_bus_kann_kommen_von: string | null
           kapazitaet_belegt: number | null
@@ -67,6 +68,7 @@ export type Database = {
           lat: number | null
           letzter_einlass: string | null
           lng: number | null
+          general_opening_hours: string | null
           metadata: string | null
           name: string
           oeffnung_bis: string | null
@@ -84,7 +86,7 @@ export type Database = {
           website: string | null
         }
         Insert: {
-          adresse: string
+          adresse?: string | null
           behindertengerecht?: boolean
           betten_frei?: boolean | null
           bezirk?: Database["public"]["Enums"]["berlin_bezirk"] | null
@@ -99,6 +101,7 @@ export type Database = {
           created_by?: string | null
           email?: string[] | null
           id?: string
+          is_mobile?: boolean
           kaelte_waerme_bus_kann_kommen_bis?: string | null
           kaelte_waerme_bus_kann_kommen_von?: string | null
           kapazitaet_belegt?: number | null
@@ -111,6 +114,7 @@ export type Database = {
           lat?: number | null
           letzter_einlass?: string | null
           lng?: number | null
+          general_opening_hours?: string | null
           metadata?: string | null
           name: string
           oeffnung_bis?: string | null
@@ -128,7 +132,7 @@ export type Database = {
           website?: string | null
         }
         Update: {
-          adresse?: string
+          adresse?: string | null
           behindertengerecht?: boolean
           betten_frei?: boolean | null
           bezirk?: Database["public"]["Enums"]["berlin_bezirk"] | null
@@ -143,6 +147,7 @@ export type Database = {
           created_by?: string | null
           email?: string[] | null
           id?: string
+          is_mobile?: boolean
           kaelte_waerme_bus_kann_kommen_bis?: string | null
           kaelte_waerme_bus_kann_kommen_von?: string | null
           kapazitaet_belegt?: number | null
@@ -155,6 +160,7 @@ export type Database = {
           lat?: number | null
           letzter_einlass?: string | null
           lng?: number | null
+          general_opening_hours?: string | null
           metadata?: string | null
           name?: string
           oeffnung_bis?: string | null

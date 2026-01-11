@@ -49,7 +49,7 @@ async function RegisterPageContent() {
 
   const { data: shelters, error } = await supabase
     .from("unterkuenfte")
-    .select("id,name,adresse,bezirk")
+    .select("id,name,is_mobile,adresse,bezirk")
     .is("owner_user_id", null)
     .order("name", { ascending: true });
 

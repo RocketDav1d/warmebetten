@@ -12,6 +12,7 @@ export type UnterkunftForMap = Pick<
   UnterkunftRow,
   | "id"
   | "name"
+  | "is_mobile"
   | "adresse"
   | "bezirk"
   | "typ"
@@ -154,7 +155,11 @@ export function UnterkuenfteLayer({
                     Kapazität: {updated}
                   </div>
                 )}
-                <div className="text-[11px] opacity-80">{u.adresse}</div>
+                {u.is_mobile ? (
+                  <div className="text-[11px] opacity-80">Mobil</div>
+                ) : u.adresse ? (
+                  <div className="text-[11px] opacity-80">{u.adresse}</div>
+                ) : null}
               </div>
             </MarkerTooltip>
           </MapMarker>

@@ -9,9 +9,24 @@ import time as time_mod
 from pathlib import Path
 from typing import Any, Iterable
 
-import requests
+try:
+    import requests  # type: ignore
+except ModuleNotFoundError:  # pragma: no cover
+    requests = None  # type: ignore
 
-from scripts.env import load_dotenv
+# Allow running both as:
+#   python -m scripts.import_unterkuenfte_one_time
+# and (fallback):
+#   python scripts/import_unterkuenfte_one_time.py
+try:
+    from scripts.env import load_dotenv
+except ModuleNotFoundError:  # pragma: no cover
+    import sys
+
+    repo_root = Path(__file__).resolve().parents[1]
+    if str(repo_root) not in sys.path:
+        sys.path.insert(0, str(repo_root))
+    from scripts.env import load_dotenv
 
 logger = logging.getLogger("import_unterkuenfte_one_time")
 
@@ -65,7 +80,8 @@ def _dedupe(entries: Iterable[dict]) -> list[dict]:
     return out
 
 
-_TIME_RE = re.compile(r"(?P<h>\\d{1,2})[:.](?P<m>\\d{2})(?:[:.](?P<s>\\d{2}))?")
+# NOTE: Use a single backslash in the regex; `\\d` would match a literal "\d".
+_TIME_RE = re.compile(r"(?P<h>\d{1,2})[:.](?P<m>\d{2})(?:[:.](?P<s>\d{2}))?")
 
 
 def _normalize_pg_time(value: Any) -> str | None:
@@ -154,6 +170,10 @@ def _supabase_rest_insert(
     timeout_s: int = 30,
     return_representation: bool = False,
 ) -> dict | None:
+    if requests is None:
+        raise RuntimeError(
+            "Missing dependency: requests. Install requirements.txt (or pip install requests) before using --commit."
+        )
     endpoint = supabase_url.rstrip("/") + "/rest/v1/unterkuenfte"
     headers = {
         "apikey": service_role_key,
@@ -187,6 +207,7 @@ def _build_insert_row(
     allowed_fields = {
         "bezirk",
         "typ",
+        "is_mobile",
         "name",
         "adresse",
         "strasse",
@@ -198,6 +219,7 @@ def _build_insert_row(
         "website",
         "verantwortliche_personen",
         "metadata",
+        "general_opening_hours",
         "oeffnung_von",
         "oeffnung_bis",
         "letzter_einlass",
@@ -231,10 +253,16 @@ def _build_insert_row(
             continue
         if v is None:
             continue
+        if isinstance(v, str) and not v.strip():
+            # Avoid storing empty strings; treat them as missing.
+            continue
         if k in time_fields:
             t = _normalize_pg_time(v)
             if t is not None:
                 row[k] = t
+            continue
+        if k == "is_mobile":
+            row[k] = bool(v)
             continue
         if k in {"telefon", "email"}:
             arr = _normalize_text_array(v)
@@ -292,8 +320,14 @@ def main() -> None:
 
     logging.basicConfig(level=getattr(logging, args.log_level), format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
-    # Load scripts/.env (user convention in this repo)
-    load_dotenv()
+    # Load scripts/.env (user convention in this repo). In some environments this
+    # file may be unavailable; treat it as optional.
+    try:
+        load_dotenv()
+    except FileNotFoundError:
+        pass
+    except PermissionError:
+        pass
 
     supabase_url = args.supabase_url or os.getenv("NEXT_PUBLIC_SUPABASE_URL") or ""
     service_role_key = args.service_role_key or os.getenv("SUPABASE_SERVICE_ROLE_KEY") or ""
@@ -319,15 +353,15 @@ def main() -> None:
             telefon = ", ".join(str(t).strip() for t in telefon_raw if str(t).strip())
         else:
             telefon = str(telefon_raw or "").strip()
-        if not name or not adresse:
-            logger.warning("Skipping %s/%s (missing name/adresse): name=%r adresse=%r", idx, len(entries), name, adresse)
+        if not name:
+            logger.warning("Skipping %s/%s (missing name): name=%r", idx, len(entries), name)
             skipped += 1
             continue
 
         logger.info("(%s/%s) %s | %s | %s", idx, len(entries), name, adresse, telefon)
 
         lat = lng = None
-        if not args.no_geocode:
+        if not args.no_geocode and adresse:
             coords = geocode_photon(q=adresse)
             if coords is None:
                 msg = "Photon: no coordinates"

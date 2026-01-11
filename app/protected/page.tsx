@@ -32,7 +32,7 @@ export default async function ProtectedPage() {
   const { data: shelters, error } = await supabase
     .from("unterkuenfte")
     .select(
-      "id,name,adresse,bezirk,typ,lat,lng,kapazitaet_max_allgemein,plaetze_frei_aktuell,betten_frei,capacity_updated_at,telefon,email,website,oeffnung_von,oeffnung_bis,letzter_einlass,bietet_essen,bietet_dusche,bietet_medizin,bietet_kleidung,bietet_betreuung,behindertengerecht"
+      "id,name,is_mobile,adresse,bezirk,typ,lat,lng,kapazitaet_max_allgemein,plaetze_frei_aktuell,betten_frei,capacity_updated_at,telefon,email,website,oeffnung_von,oeffnung_bis,letzter_einlass,bietet_essen,bietet_dusche,bietet_medizin,bietet_kleidung,bietet_betreuung,behindertengerecht"
     )
     .eq("owner_user_id", user.id)
     .order("name", { ascending: true });
@@ -83,7 +83,7 @@ export default async function ProtectedPage() {
                       {u.name}
                     </CardTitle>
                     <div className="text-xs text-muted-foreground">
-                      {u.adresse}
+                      {u.is_mobile ? "Mobil" : u.adresse ?? "—"}
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
@@ -103,6 +103,14 @@ export default async function ProtectedPage() {
                   <input type="hidden" name="unterkunftId" value={u.id} />
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <label className="flex items-center gap-2 text-sm sm:col-span-3">
+                      <input
+                        type="checkbox"
+                        name="is_mobile"
+                        defaultChecked={Boolean(u.is_mobile)}
+                      />
+                      Mobile Unterkunft (keine feste Adresse)
+                    </label>
                     <div className="space-y-2">
                       <Label htmlFor={`plaetze-${u.id}`}>Plätze frei (aktuell)</Label>
                       <Input

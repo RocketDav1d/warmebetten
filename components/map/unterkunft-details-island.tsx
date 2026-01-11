@@ -111,7 +111,11 @@ export function UnterkunftDetailsIsland({
               {free > 0 ? `${free} Plätze frei` : "Keine Plätze frei"}
             </Badge>
           )}
-          <Badge variant="outline">{unterkunft.adresse}</Badge>
+          {unterkunft.is_mobile ? (
+            <Badge variant="outline">Mobil</Badge>
+          ) : unterkunft.adresse ? (
+            <Badge variant="outline">{unterkunft.adresse}</Badge>
+          ) : null}
         </div>
       </CardHeader>
 

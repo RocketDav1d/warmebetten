@@ -61,8 +61,12 @@ class Unterkunft(BaseModel):
     # location / display
     bezirk: BerlinBezirk | None = None
     typ: UnterkunftTyp | None = None
+    is_mobile: bool = Field(default=False, description="True if this is a mobile service without a fixed address")
     name: str = Field(description="Name of the offer/shelter")
-    adresse: str = Field(description="Full address as shown in the source")
+    adresse: str | None = Field(
+        default=None,
+        description="Full address as shown in the source (may be null for mobile services)",
+    )
     strasse: str | None = None
 
     u_bahn_station: str | None = None

@@ -2760,8 +2760,9 @@
     {
       "bezirk": null,
       "typ": "essen_verpflegung",
+      "is_mobile": true,
       "name": "MOBILE SUPPENKÜCHEN HILFSTOUREN DER BERLINER OBDACHLOSENHILFE E.V.",
-      "adresse": ".",
+      "adresse": null,
       "strasse": null,
       "u_bahn_station": null,
       "s_bahn_station": null,
@@ -3142,8 +3143,9 @@
     {
       "bezirk": null,
       "typ": "medizinische_hilfen",
+      "is_mobile": true,
       "name": "MOBILE ÄRZTLICHE VERSORGUNG CARITAS-ARZTMOBIL",
-      "adresse": "",
+      "adresse": null,
       "strasse": null,
       "u_bahn_station": null,
       "s_bahn_station": null,
@@ -3181,8 +3183,9 @@
     {
       "bezirk": null,
       "typ": "medizinische_hilfen",
+      "is_mobile": true,
       "name": "STRASSENAMBULANZ DER BERLINER STADTMISSION",
-      "adresse": "",
+      "adresse": null,
       "strasse": null,
       "u_bahn_station": null,
       "s_bahn_station": null,
@@ -3731,8 +3734,9 @@
     {
       "bezirk": null,
       "typ": "hygiene",
+      "is_mobile": true,
       "name": "Duschmobil für Frauen",
-      "adresse": ".",
+      "adresse": null,
       "strasse": null,
       "u_bahn_station": null,
       "s_bahn_station": null,

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+import { Constants, type TablesUpdate } from "@/lib/supabase/database.types";
 
 function parseOptionalInt(value: FormDataEntryValue | null) {
   if (typeof value !== "string") return null;
@@ -25,6 +26,16 @@ function parseOptionalString(value: FormDataEntryValue | null) {
   if (typeof value !== "string") return null;
   const s = value.trim();
   return s ? s : null;
+}
+
+function parseOptionalEnum<T extends string>(
+  value: FormDataEntryValue | null,
+  allowed: readonly T[],
+): T | null {
+  if (typeof value !== "string") return null;
+  const s = value.trim();
+  if (!s) return null;
+  return (allowed as readonly string[]).includes(s) ? (s as T) : null;
 }
 
 function parseStringArrayCsv(value: FormDataEntryValue | null) {
@@ -58,8 +69,9 @@ export async function updateUnterkunft(formData: FormData) {
 
   const plaetzeFreiAktuell = parseOptionalInt(formData.get("plaetze_frei_aktuell"));
   const kapMaxAllg = parseOptionalInt(formData.get("kapazitaet_max_allgemein"));
+  const name = parseOptionalString(formData.get("name"));
 
-  const update = {
+  const update: TablesUpdate<"unterkuenfte"> = {
     // capacity
     ...(plaetzeFreiAktuell == null
       ? {}
@@ -69,9 +81,13 @@ export async function updateUnterkunft(formData: FormData) {
       : { kapazitaet_max_allgemein: Math.max(0, kapMaxAllg) }),
 
     // location basics
-    bezirk: parseOptionalString(formData.get("bezirk")),
-    typ: parseOptionalString(formData.get("typ")),
-    name: parseOptionalString(formData.get("name")),
+    is_mobile: formData.get("is_mobile") === "on",
+    bezirk: parseOptionalEnum(
+      formData.get("bezirk"),
+      Constants.public.Enums.berlin_bezirk,
+    ),
+    typ: parseOptionalEnum(formData.get("typ"), Constants.public.Enums.unterkunft_typ),
+    ...(name == null ? {} : { name }),
     adresse: parseOptionalString(formData.get("adresse")),
     strasse: parseOptionalString(formData.get("strasse")),
     lat: parseOptionalFloat(formData.get("lat")),
@@ -94,7 +110,7 @@ export async function updateUnterkunft(formData: FormData) {
     bietet_kleidung: formData.get("bietet_kleidung") === "on",
     bietet_betreuung: formData.get("bietet_betreuung") === "on",
     behindertengerecht: formData.get("behindertengerecht") === "on",
-  } as const;
+  };
 
   const { error } = await supabase
     .from("unterkuenfte")
