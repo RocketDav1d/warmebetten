@@ -27,7 +27,7 @@ export function RegisterClaimClient({
       if (!unterkunftId) {
         setResult({
           status: "error",
-          message: "Missing unterkunftId. Bitte starte den Registrierungsflow neu.",
+          message: "unterkunftId fehlt. Bitte starte den Registrierungsflow neu.",
         });
         setIsLoading(false);
         return;
@@ -39,7 +39,7 @@ export function RegisterClaimClient({
         setResult({
           status: "error",
           message:
-            "Du bist nicht eingeloggt. Bitte bestätige zuerst die Email (oder logge dich ein).",
+            "Du bist nicht eingeloggt. Bitte bestätige zuerst die E‑Mail (oder logge dich ein).",
         });
         setIsLoading(false);
         return;
@@ -57,7 +57,7 @@ export function RegisterClaimClient({
             status: "error",
             message:
               (json as any)?.message ??
-              `Request failed (${res.status}). Bitte später erneut versuchen.`,
+              `Anfrage fehlgeschlagen (${res.status}). Bitte später erneut versuchen.`,
           });
         } else {
           setResult(json);
@@ -85,8 +85,8 @@ export function RegisterClaimClient({
     return (
       <div className="space-y-3">
         <div className="text-sm">
-          ✅ Deine Email ist whitelisted – die Unterkunft wurde direkt mit deinem
-          Account verbunden.
+          ✅ Deine E‑Mail-Adresse ist freigeschaltet – die Unterkunft wurde direkt
+          mit deinem Account verbunden.
         </div>
         <Button asChild className="w-full">
           <Link href="/protected">Kapazität verwalten</Link>

@@ -83,7 +83,7 @@ async function AdminApplications() {
                 <thead className="bg-muted/40">
                   <tr>
                     <th className="p-2 text-left">Unterkunft</th>
-                    <th className="p-2 text-left">Email</th>
+                    <th className="p-2 text-left">E‑Mail</th>
                     <th className="p-2 text-left">Eingang</th>
                     <th className="p-2 text-left">Aktion</th>
                   </tr>
@@ -107,7 +107,7 @@ async function AdminApplications() {
                         <form action={approveApplication}>
                           <input type="hidden" name="applicationId" value={a.id} />
                           <Button type="submit" size="sm">
-                            Approve
+                            Freigeben
                           </Button>
                         </form>
                       </td>

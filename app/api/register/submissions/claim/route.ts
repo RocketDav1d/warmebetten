@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       typeof body?.submissionId === "string" ? body.submissionId : null;
     if (!submissionId) {
       return NextResponse.json(
-        { message: "Missing submissionId" },
+        { message: "submissionId fehlt" },
         { status: 400 },
       );
     }
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData.user) {
       return NextResponse.json(
-        { message: "Not authenticated" },
+        { message: "Nicht angemeldet" },
         { status: 401 },
       );
     }
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     const user = userData.user;
     const email = user.email ? normalizeEmail(user.email) : null;
     if (!email) {
-      return NextResponse.json({ message: "Missing user email" }, { status: 400 });
+      return NextResponse.json({ message: "E‑Mail-Adresse fehlt" }, { status: 400 });
     }
 
     const admin = createAdminClient();
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           message:
-            "Submission not found (or already claimed). Bitte starte den Flow erneut.",
+            "Einreichung nicht gefunden (oder bereits übernommen). Bitte starte den Ablauf erneut.",
         },
         { status: 404 },
       );
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ status: "pending" } as const);
   } catch (e: unknown) {
     return NextResponse.json(
-      { message: e instanceof Error ? e.message : "Unknown error" },
+      { message: e instanceof Error ? e.message : "Unbekannter Fehler" },
       { status: 500 },
     );
   }

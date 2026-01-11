@@ -65,7 +65,7 @@ export function MobileOffersIsland({ unterkuenfte }: { unterkuenfte: UnterkunftF
               {u.website && (u.telefon?.length || u.email?.length) ? " • " : null}
               {u.telefon?.length ? <span>Tel: {u.telefon.join(", ")}</span> : null}
               {u.telefon?.length && u.email?.length ? " • " : null}
-              {u.email?.length ? <span>Email: {u.email.join(", ")}</span> : null}
+              {u.email?.length ? <span>E‑Mail: {u.email.join(", ")}</span> : null}
             </div>
 
             {idx < unterkuenfte.length - 1 ? <Separator /> : null}

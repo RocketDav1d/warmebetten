@@ -63,7 +63,7 @@ function normalizeBezirk(value: unknown): BerlinBezirk | null {
 export async function approveSubmission(formData: FormData) {
   const submissionId = formData.get("submissionId");
   if (typeof submissionId !== "string" || !submissionId) {
-    throw new Error("Missing submissionId");
+    throw new Error("submissionId fehlt");
   }
 
   const serviceRoleProblem = getServiceRoleProblem();
@@ -81,7 +81,7 @@ export async function approveSubmission(formData: FormData) {
     .eq("id", user.id)
     .maybeSingle();
   if (profile?.role !== "admin") {
-    throw new Error("Not authorized");
+    throw new Error("Nicht berechtigt");
   }
 
   const admin = createAdminClient();
@@ -93,9 +93,9 @@ export async function approveSubmission(formData: FormData) {
     .maybeSingle();
 
   if (subErr) throw new Error(subErr.message);
-  if (!sub) throw new Error("Submission not found");
-  if (sub.status !== "pending") throw new Error("Submission is not pending");
-  if (!sub.user_id) throw new Error("Submission has no user attached");
+  if (!sub) throw new Error("Einreichung nicht gefunden");
+  if (sub.status !== "pending") throw new Error("Einreichung ist nicht offen");
+  if (!sub.user_id) throw new Error("Einreichung ist keinem Benutzer zugeordnet");
 
   const payload = sub.payload as Payload;
   if (
@@ -104,7 +104,7 @@ export async function approveSubmission(formData: FormData) {
     typeof payload.lat !== "number" ||
     typeof payload.lng !== "number"
   ) {
-    throw new Error("Submission payload incomplete");
+    throw new Error("Einreichung ist unvollständig");
   }
 
   // Create shelter + connect to user.

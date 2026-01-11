@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
     if (!unterkunftId) {
       return NextResponse.json(
-        { status: "error", message: "Missing unterkunftId" },
+        { status: "error", message: "unterkunftId fehlt" },
         { status: 400 },
       );
     }
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData.user) {
       return NextResponse.json(
-        { status: "error", message: "Not authenticated" },
+        { status: "error", message: "Nicht angemeldet" },
         { status: 401 },
       );
     }
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     const email = user.email ? normalizeEmail(user.email) : null;
     if (!email) {
       return NextResponse.json(
-        { status: "error", message: "Missing user email" },
+        { status: "error", message: "E‑Mail-Adresse fehlt" },
         { status: 400 },
       );
     }
@@ -135,7 +135,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ status: "pending" } as const);
   } catch (e: unknown) {
     return NextResponse.json(
-      { status: "error", message: e instanceof Error ? e.message : "Unknown error" },
+      { status: "error", message: e instanceof Error ? e.message : "Unbekannter Fehler" },
       { status: 500 },
     );
   }

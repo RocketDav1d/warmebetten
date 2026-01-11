@@ -59,7 +59,7 @@ function parseTime(value: FormDataEntryValue | null) {
 export async function updateUnterkunft(formData: FormData) {
   const unterkunftId = formData.get("unterkunftId");
   if (typeof unterkunftId !== "string" || !unterkunftId) {
-    throw new Error("Missing unterkunftId");
+    throw new Error("unterkunftId fehlt");
   }
 
   const supabase = await createClient();

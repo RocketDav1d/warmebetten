@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function approveApplication(formData: FormData) {
   const applicationId = formData.get("applicationId");
   if (typeof applicationId !== "string" || !applicationId) {
-    throw new Error("Missing applicationId");
+    throw new Error("applicationId fehlt");
   }
 
   const supabase = await createClient();
@@ -24,7 +24,7 @@ export async function approveApplication(formData: FormData) {
     .maybeSingle();
 
   if (profile?.role !== "admin") {
-    throw new Error("Not authorized");
+    throw new Error("Nicht berechtigt");
   }
 
   const serviceRoleProblem = getServiceRoleProblem();
@@ -38,8 +38,8 @@ export async function approveApplication(formData: FormData) {
     .maybeSingle();
 
   if (appErr) throw new Error(appErr.message);
-  if (!app) throw new Error("Application not found");
-  if (app.status !== "pending") throw new Error("Application is not pending");
+  if (!app) throw new Error("Anfrage nicht gefunden");
+  if (app.status !== "pending") throw new Error("Anfrage ist nicht offen");
 
   // Claim shelter if still unclaimed
   const { data: updated, error: updErr } = await admin
@@ -52,7 +52,7 @@ export async function approveApplication(formData: FormData) {
 
   if (updErr) throw new Error(updErr.message);
   if (!updated?.id) {
-    throw new Error("Shelter already claimed");
+    throw new Error("Unterkunft ist bereits verbunden");
   }
 
   const { error: updAppErr } = await admin

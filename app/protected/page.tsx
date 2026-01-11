@@ -153,7 +153,7 @@ export default async function ProtectedPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor={`email-${u.id}`}>Email (kommagetrennt)</Label>
+                      <Label htmlFor={`email-${u.id}`}>E‑Mail (kommagetrennt)</Label>
                       <Input
                         id={`email-${u.id}`}
                         name="email_csv"

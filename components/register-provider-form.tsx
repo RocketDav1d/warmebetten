@@ -146,8 +146,8 @@ export function RegisterProviderForm({ shelters }: { shelters: ShelterRow[] }) {
               <div className="rounded-md border bg-muted/20 px-3 py-2 text-sm">
                 <div className="font-medium">
                   {(selectedShelter.unterkunft_email_whitelist?.length ?? 0) === 1
-                    ? "Whitelisted Email"
-                    : "Whitelisted Emails"}
+                    ? "Freigeschaltete E‑Mail"
+                    : "Freigeschaltete E‑Mails"}
                 </div>
                 <div className="text-muted-foreground">
                   {selectedShelter.unterkunft_email_whitelist &&
@@ -173,7 +173,7 @@ export function RegisterProviderForm({ shelters }: { shelters: ShelterRow[] }) {
         <div className="text-sm font-semibold">2) Registrieren</div>
 
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">E‑Mail</Label>
           <Input
             id="email"
             type="email"

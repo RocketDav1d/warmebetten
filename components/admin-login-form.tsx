@@ -40,7 +40,7 @@ export function AdminLoginForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Admin Login</CardTitle>
+        <CardTitle className="text-2xl">Admin-Anmeldung</CardTitle>
         <CardDescription>
           Interne Seite. Nur für Admin-Accounts.
         </CardDescription>
@@ -48,7 +48,7 @@ export function AdminLoginForm() {
       <CardContent>
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">E‑Mail</Label>
             <Input
               id="email"
               type="email"

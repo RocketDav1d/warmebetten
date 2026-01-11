@@ -27,7 +27,7 @@ export function RegisterNewShelterClaimClient({
         setResult({
           status: "error",
           message:
-            "Missing submissionId. Bitte starte den Flow erneut (/register/new).",
+            "submissionId fehlt. Bitte starte den Ablauf erneut (/register/new).",
         });
         setIsLoading(false);
         return;
@@ -39,7 +39,7 @@ export function RegisterNewShelterClaimClient({
         setResult({
           status: "error",
           message:
-            "Du bist nicht eingeloggt. Bitte bestätige zuerst die Email (oder logge dich ein).",
+            "Du bist nicht eingeloggt. Bitte bestätige zuerst die E‑Mail (oder logge dich ein).",
         });
         setIsLoading(false);
         return;
@@ -57,7 +57,7 @@ export function RegisterNewShelterClaimClient({
             status: "error",
             message:
               (json as any)?.message ??
-              `Request failed (${res.status}). Bitte später erneut versuchen.`,
+              `Anfrage fehlgeschlagen (${res.status}). Bitte später erneut versuchen.`,
           });
         } else {
           setResult(json);

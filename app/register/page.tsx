@@ -73,7 +73,7 @@ async function RegisterPageContent() {
   // If whitelist table is not readable yet (missing GRANT/policy), still show shelters.
   if (withWhitelistError?.message?.includes("unterkunft_email_whitelist")) {
     whitelistWarning =
-      "Whitelist-Emails konnten nicht geladen werden (DB-Permissions fehlen). Bitte Migration anwenden.";
+      "Freigeschaltete E‑Mails konnten nicht geladen werden (DB-Permissions fehlen). Bitte Migration anwenden.";
     const retry = await supabase
       .from("unterkuenfte")
       .select(baseSelect)
@@ -96,7 +96,9 @@ async function RegisterPageContent() {
               Wenn du Betreiber bist: wähle zuerst deine Unterkunft aus und registriere dich anschließend.
             </p>
             <p className="text-sm text-muted-foreground">
-              Wenn deine Email für diese Unterkunft whitelisted ist, wird die Verbindung direkt erstellt. Andernfalls landet deine Anfrage zur Freischaltung beim Admin.
+              Wenn deine E‑Mail-Adresse für diese Unterkunft freigeschaltet ist,
+              wird die Verbindung direkt erstellt. Andernfalls landet deine Anfrage
+              zur Freischaltung beim Admin.
             </p>
           </CardHeader>
           <CardContent>

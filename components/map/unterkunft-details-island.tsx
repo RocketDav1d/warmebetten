@@ -168,7 +168,7 @@ export function UnterkunftDetailsIsland({
                 <div>Tel: {unterkunft.telefon.join(", ")}</div>
               ) : null}
               {unterkunft.email?.length ? (
-                <div>Email: {unterkunft.email.join(", ")}</div>
+                <div>E‑Mail: {unterkunft.email.join(", ")}</div>
               ) : null}
               {unterkunft.website && (
                 <div className="truncate">

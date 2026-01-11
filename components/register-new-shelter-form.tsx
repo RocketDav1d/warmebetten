@@ -130,7 +130,7 @@ export function RegisterNewShelterForm() {
   function validateForSubmit(): string | null {
     const navErr = validateForNavigation(4);
     if (navErr) return navErr;
-    if (!email.trim()) return "Bitte Email angeben.";
+    if (!email.trim()) return "Bitte E‑Mail-Adresse angeben.";
     if (!password) return "Bitte Passwort angeben.";
     if (password !== repeatPassword) return "Passwörter stimmen nicht überein.";
     return null;
@@ -409,7 +409,11 @@ export function RegisterNewShelterForm() {
                         }>;
                         message?: string;
                       };
-                      if (!res.ok) throw new Error(json.message ?? "Geocoding failed");
+                      if (!res.ok) {
+                        throw new Error(
+                          json.message ?? "Adresse konnte nicht gefunden werden",
+                        );
+                      }
                       setAddressResults(json.features ?? []);
                     } catch {
                       setAddressResults([]);
@@ -507,7 +511,7 @@ export function RegisterNewShelterForm() {
             </div>
 
             <div className="grid gap-2">
-              <Label>Emails (Kontakt)</Label>
+              <Label>E‑Mails (Kontakt)</Label>
               <div className="flex flex-wrap gap-2">
                 {kontaktEmails.map((val, idx) => (
                   <div key={`mail-${idx}`} className="flex items-center gap-2">
@@ -519,7 +523,7 @@ export function RegisterNewShelterForm() {
                         next[idx] = e.target.value;
                         setKontaktEmails(next);
                       }}
-                      placeholder={idx === 0 ? "kontakt@…" : "Weitere Email"}
+                      placeholder={idx === 0 ? "kontakt@…" : "Weitere E‑Mail"}
                       className="w-[260px]"
                     />
                     {idx === kontaktEmails.length - 1 && (
@@ -527,7 +531,7 @@ export function RegisterNewShelterForm() {
                         type="button"
                         variant="outline"
                         size="icon"
-                        aria-label="Email hinzufügen"
+                        aria-label="E‑Mail hinzufügen"
                         onClick={() => setKontaktEmails([...kontaktEmails, ""])}
                       >
                         <Plus className="h-4 w-4" />
@@ -827,7 +831,7 @@ export function RegisterNewShelterForm() {
 
             <div className="text-sm font-semibold">Account erstellen</div>
             <div className="grid gap-2">
-              <Label htmlFor="email">Account Email</Label>
+              <Label htmlFor="email">Account E‑Mail</Label>
               <Input
                 id="email"
                 type="email"

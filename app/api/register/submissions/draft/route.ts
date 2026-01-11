@@ -19,10 +19,10 @@ export async function POST(request: Request) {
     const payload = body?.payload;
 
     if (!email) {
-      return NextResponse.json({ message: "Missing email" }, { status: 400 });
+      return NextResponse.json({ message: "E‑Mail-Adresse fehlt" }, { status: 400 });
     }
     if (!payload || typeof payload !== "object") {
-      return NextResponse.json({ message: "Missing payload" }, { status: 400 });
+      return NextResponse.json({ message: "Daten (payload) fehlen" }, { status: 400 });
     }
 
     const admin = createAdminClient();
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ submissionId: data.id });
   } catch (e: unknown) {
     return NextResponse.json(
-      { message: e instanceof Error ? e.message : "Unknown error" },
+      { message: e instanceof Error ? e.message : "Unbekannter Fehler" },
       { status: 500 },
     );
   }

@@ -781,7 +781,7 @@ function CompassButton({ onClick }: { onClick: () => void }) {
   }, [isLoaded, map]);
 
   return (
-    <ControlButton onClick={onClick} label="Reset bearing to north">
+    <ControlButton onClick={onClick} label="Ausrichtung nach Norden zurücksetzen">
       <svg
         ref={compassRef}
         viewBox="0 0 24 24"

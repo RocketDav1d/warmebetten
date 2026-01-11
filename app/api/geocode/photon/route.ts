@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
   if (!res.ok) {
     return NextResponse.json(
-      { message: `Photon error (${res.status})` },
+      { message: `Photon-Fehler (${res.status})` },
       { status: 502 },
     );
   }
