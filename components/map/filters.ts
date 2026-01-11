@@ -1,8 +1,12 @@
-import type { Database } from "@/lib/supabase/database.types";
+import {
+  BEZIRK_LABELS,
+  type BerlinBezirk,
+  type UnterkunftTyp,
+} from "@/lib/unterkunft/meta";
 import type { UnterkunftForMap } from "@/components/map/unterkuenfte-layer";
 
-export type UnterkunftTyp = Database["public"]["Enums"]["unterkunft_typ"];
-export type BerlinBezirk = Database["public"]["Enums"]["berlin_bezirk"];
+export type { BerlinBezirk, UnterkunftTyp } from "@/lib/unterkunft/meta";
+export { BEZIRK_LABELS } from "@/lib/unterkunft/meta";
 
 export type BettenFreiFilter = "any" | "free" | "full";
 
@@ -38,22 +42,6 @@ export const DEFAULT_FILTERS: MapFilters = {
     bietet_kleidung: false,
     bietet_medizin: false,
   },
-};
-
-// Used for UI labels and to map enum values -> GeoJSON `Gemeinde_name`.
-export const BEZIRK_LABELS: Record<BerlinBezirk, string> = {
-  mitte: "Mitte",
-  friedrichshain_kreuzberg: "Friedrichshain-Kreuzberg",
-  pankow: "Pankow",
-  charlottenburg_wilmersdorf: "Charlottenburg-Wilmersdorf",
-  spandau: "Spandau",
-  steglitz_zehlendorf: "Steglitz-Zehlendorf",
-  tempelhof_schoeneberg: "Tempelhof-Schöneberg",
-  neukoelln: "Neukölln",
-  treptow_koepenick: "Treptow-Köpenick",
-  marzahn_hellersdorf: "Marzahn-Hellersdorf",
-  lichtenberg: "Lichtenberg",
-  reinickendorf: "Reinickendorf",
 };
 
 export function bezirkNamesForGeoJson(bezirke: BerlinBezirk[]): string[] {

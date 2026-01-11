@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import {
+  BEZIRKE,
+  BEZIRK_LABELS,
+  UNTERKUNFT_TYPEN,
+  UNTERKUNFT_TYP_LABELS,
+  type BerlinBezirk,
+  type UnterkunftTyp,
+} from "@/lib/unterkunft/meta";
 import { Button } from "@/components/ui/button";
 import {
   Stepper,
@@ -21,70 +29,12 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 
-const BEZIRKE = [
-  "mitte",
-  "friedrichshain_kreuzberg",
-  "pankow",
-  "charlottenburg_wilmersdorf",
-  "spandau",
-  "steglitz_zehlendorf",
-  "tempelhof_schoeneberg",
-  "neukoelln",
-  "treptow_koepenick",
-  "marzahn_hellersdorf",
-  "lichtenberg",
-  "reinickendorf",
-] as const;
-
-type Bezirk = (typeof BEZIRKE)[number];
-
-const UNTERKUNFT_TYPEN = [
-  "notuebernachtung",
-  "nachtcafe",
-  "tagesangebote",
-  "essen_verpflegung",
-  "medizinische_hilfen",
-  "suchtangebote",
-  "beratung",
-  "hygiene",
-  "kleiderkammer",
-] as const;
-
-type UnterkunftTyp = (typeof UNTERKUNFT_TYPEN)[number];
-
 const STEPS = [1, 2, 3, 4] as const;
 const STEP_TITLES: Record<(typeof STEPS)[number], string> = {
   1: "Basics",
   2: "Adresse & Kontakt",
   3: "Angebote",
   4: "Kapazität & Account",
-};
-
-const UNTERKUNFT_TYP_LABELS: Record<UnterkunftTyp, string> = {
-  notuebernachtung: "Notübernachtung",
-  nachtcafe: "Nachtcafé",
-  tagesangebote: "Tagesangebote",
-  essen_verpflegung: "Essen / Verpflegung",
-  medizinische_hilfen: "Medizinische Hilfen",
-  suchtangebote: "Suchtangebote",
-  beratung: "Beratung",
-  hygiene: "Hygiene",
-  kleiderkammer: "Kleiderkammer",
-};
-
-const BEZIRK_LABELS: Record<Bezirk, string> = {
-  mitte: "Mitte",
-  friedrichshain_kreuzberg: "Friedrichshain-Kreuzberg",
-  pankow: "Pankow",
-  charlottenburg_wilmersdorf: "Charlottenburg-Wilmersdorf",
-  spandau: "Spandau",
-  steglitz_zehlendorf: "Steglitz-Zehlendorf",
-  tempelhof_schoeneberg: "Tempelhof-Schöneberg",
-  neukoelln: "Neukölln",
-  treptow_koepenick: "Treptow-Köpenick",
-  marzahn_hellersdorf: "Marzahn-Hellersdorf",
-  lichtenberg: "Lichtenberg",
-  reinickendorf: "Reinickendorf",
 };
 
 export function RegisterNewShelterForm() {
@@ -98,7 +48,7 @@ export function RegisterNewShelterForm() {
   // shelter payload (fields match public.unterkuenfte)
   const [typ, setTyp] = useState<UnterkunftTyp>("notuebernachtung");
   const [name, setName] = useState("");
-  const [bezirk, setBezirk] = useState<Bezirk>("mitte");
+  const [bezirk, setBezirk] = useState<BerlinBezirk>("mitte");
 
   // address / coords (via Photon)
   const [adresse, setAdresse] = useState(""); // final label saved to DB
@@ -401,7 +351,7 @@ export function RegisterNewShelterForm() {
                 id="bezirk"
                 className="h-9 w-full rounded-md border bg-background px-3 text-sm"
                 value={bezirk}
-                onChange={(e) => setBezirk(e.target.value as Bezirk)}
+                onChange={(e) => setBezirk(e.target.value as BerlinBezirk)}
               >
                 {BEZIRKE.map((b) => (
                   <option key={b} value={b}>

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 import { hasEnvVars } from "@/lib/utils";
+import type { BerlinBezirk } from "@/lib/unterkunft/meta";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RegisterProviderForm } from "@/components/register-provider-form";
@@ -47,11 +48,43 @@ export default function RegisterPage() {
 async function RegisterPageContent() {
   const supabase = await createClient();
 
-  const { data: shelters, error } = await supabase
+  const baseSelect = "id,name,is_mobile,adresse,bezirk";
+
+  let whitelistWarning: string | null = null;
+
+  type ShelterForRegister = {
+    id: string;
+    name: string;
+    is_mobile: boolean;
+    adresse: string | null;
+    bezirk: BerlinBezirk | null;
+    unterkunft_email_whitelist?: Array<{ email: string }>;
+  };
+
+  const { data: sheltersWithWhitelist, error: withWhitelistError } = await supabase
     .from("unterkuenfte")
-    .select("id,name,is_mobile,adresse,bezirk")
+    .select(`${baseSelect},unterkunft_email_whitelist(email)`)
     .is("owner_user_id", null)
     .order("name", { ascending: true });
+
+  let shelters = sheltersWithWhitelist as ShelterForRegister[] | null;
+  let error = withWhitelistError;
+
+  // If whitelist table is not readable yet (missing GRANT/policy), still show shelters.
+  if (withWhitelistError?.message?.includes("unterkunft_email_whitelist")) {
+    whitelistWarning =
+      "Whitelist-Emails konnten nicht geladen werden (DB-Permissions fehlen). Bitte Migration anwenden.";
+    const retry = await supabase
+      .from("unterkuenfte")
+      .select(baseSelect)
+      .is("owner_user_id", null)
+      .order("name", { ascending: true });
+    shelters =
+      (retry.data as Array<Omit<ShelterForRegister, "unterkunft_email_whitelist">> | null)?.map(
+        (s) => ({ ...s, unterkunft_email_whitelist: [] }),
+      ) ?? null;
+    error = retry.error;
+  }
 
   return (
     <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
@@ -60,10 +93,10 @@ async function RegisterPageContent() {
           <CardHeader className="space-y-2">
             <CardTitle className="text-xl">Betreiber-Registrierung</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Wenn du Betreiber bist: wähle zuerst deine Unterkunft aus und registriere dich
-              anschließend. Wenn deine Email für diese Unterkunft whitelisted ist, wird die
-              Verbindung direkt erstellt. Andernfalls landet deine Anfrage zur Freischaltung
-              beim Admin.
+              Wenn du Betreiber bist: wähle zuerst deine Unterkunft aus und registriere dich anschließend.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Wenn deine Email für diese Unterkunft whitelisted ist, wird die Verbindung direkt erstellt. Andernfalls landet deine Anfrage zur Freischaltung beim Admin.
             </p>
           </CardHeader>
           <CardContent>
@@ -73,6 +106,11 @@ async function RegisterPageContent() {
               </div>
             ) : (
               <div className="space-y-4">
+                {whitelistWarning && (
+                  <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+                    {whitelistWarning}
+                  </div>
+                )}
                 <div className="flex items-center justify-between gap-3">
                   <div className="text-sm text-muted-foreground">
                     Oder: neue Unterkunft einreichen (Admin-Freigabe erforderlich)
