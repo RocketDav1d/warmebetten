@@ -44,4 +44,5 @@ next-env.d.ts
 
 # extraction results (keep .gitkeep, ignore actual JSON outputs)
 scripts/results/*.json
+scripts/__pycache__/
 shelters.structured.json
