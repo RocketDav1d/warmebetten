@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { Map, MapControls } from "@/components/ui/map";
 import { UnterkuenfteLayer, type UnterkunftForMap } from "@/components/map/unterkuenfte-layer";
 import { UnterkunftDetailsIsland } from "@/components/map/unterkunft-details-island";
+import { applyMapFilters, filtersFromSearchParams } from "@/components/map/filters";
 
 const BERLIN_CENTER: [number, number] = [13.405, 52.52];
 const BERLIN_BOUNDS: [[number, number], [number, number]] = [
@@ -14,11 +16,28 @@ const BERLIN_BOUNDS: [[number, number], [number, number]] = [
 
 export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+
+  const filters = useMemo(
+    () => filtersFromSearchParams(new URLSearchParams(searchParams.toString())),
+    [searchParams]
+  );
+
+  const filtered = useMemo(
+    () => applyMapFilters(unterkuenfte, filters),
+    [unterkuenfte, filters]
+  );
 
   const selected = useMemo(
-    () => unterkuenfte.find((u) => u.id === selectedId) ?? null,
-    [unterkuenfte, selectedId]
+    () => filtered.find((u) => u.id === selectedId) ?? null,
+    [filtered, selectedId]
   );
+
+  useEffect(() => {
+    if (selectedId && !filtered.some((u) => u.id === selectedId)) {
+      setSelectedId(null);
+    }
+  }, [filtered, selectedId]);
 
   return (
     <Map
@@ -33,7 +52,7 @@ export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }
       <MapControls showZoom showLocate showFullscreen />
 
       <UnterkuenfteLayer
-        unterkuenfte={unterkuenfte}
+        unterkuenfte={filtered}
         onSelect={(u) => setSelectedId(u.id)}
       />
 

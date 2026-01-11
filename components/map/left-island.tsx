@@ -31,13 +31,14 @@ export function LeftIsland() {
           <FiltersPanel />
         </section>
 
+        <Separator className="mb-2" />
+
         <section className="space-y-3">
-          <div className="text-sm font-semibold">Login</div>
           <Suspense
             fallback={
-              <div className="flex gap-2">
-                <Skeleton className="h-8 w-24" />
-                <Skeleton className="h-8 w-28" />
+              <div className="flex w-full gap-2">
+                <Skeleton className="h-8 flex-1" />
+                <Skeleton className="h-8 flex-1" />
               </div>
             }
           >
