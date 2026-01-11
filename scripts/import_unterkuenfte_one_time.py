@@ -275,6 +275,11 @@ def main() -> None:
     parser.add_argument("--service-role-key", default=None, help="Defaults to SUPABASE_SERVICE_ROLE_KEY env var")
     parser.add_argument("--default-typ", default="notuebernachtung")
     parser.add_argument("--photon-sleep-ms", type=int, default=150, help="Sleep between Photon calls")
+    parser.add_argument(
+        "--no-geocode",
+        action="store_true",
+        help="Do not call Photon geocoding. Inserts can omit lat/lng (they are nullable).",
+    )
     parser.add_argument("--commit", action="store_true", help="Actually insert into Supabase (default: dry-run)")
     parser.add_argument(
         "--skip-ungeocodable",
@@ -293,10 +298,11 @@ def main() -> None:
     supabase_url = args.supabase_url or os.getenv("NEXT_PUBLIC_SUPABASE_URL") or ""
     service_role_key = args.service_role_key or os.getenv("SUPABASE_SERVICE_ROLE_KEY") or ""
 
-    if not supabase_url:
-        raise RuntimeError("Missing Supabase URL. Set NEXT_PUBLIC_SUPABASE_URL or pass --supabase-url")
-    if not service_role_key:
-        raise RuntimeError("Missing service role key. Set SUPABASE_SERVICE_ROLE_KEY or pass --service-role-key")
+    if args.commit:
+        if not supabase_url:
+            raise RuntimeError("Missing Supabase URL. Set NEXT_PUBLIC_SUPABASE_URL or pass --supabase-url")
+        if not service_role_key:
+            raise RuntimeError("Missing service role key. Set SUPABASE_SERVICE_ROLE_KEY or pass --service-role-key")
 
     entries = _dedupe(_load_extraction(args.in_path))
     logger.info("Loaded %s unique extracted unterkuenfte from %s", len(entries), args.in_path)
@@ -320,18 +326,20 @@ def main() -> None:
 
         logger.info("(%s/%s) %s | %s | %s", idx, len(entries), name, adresse, telefon)
 
-        coords = geocode_photon(q=adresse)
-        if coords is None:
-            msg = "Photon: no coordinates"
-            if args.skip_ungeocodable:
-                logger.warning("%s -> skipping", msg)
-                skipped += 1
-                continue
-            logger.warning("%s -> inserting without coords (lat/lng omitted)", msg)
-            lat = lng = None
-        else:
-            lat, lng = coords
-            logger.info("Photon: lat=%s lng=%s", lat, lng)
+        lat = lng = None
+        if not args.no_geocode:
+            coords = geocode_photon(q=adresse)
+            if coords is None:
+                msg = "Photon: no coordinates"
+                if args.skip_ungeocodable:
+                    logger.warning("%s -> skipping", msg)
+                    skipped += 1
+                    continue
+                logger.warning("%s -> inserting without coords (lat/lng omitted)", msg)
+                lat = lng = None
+            else:
+                lat, lng = coords
+                logger.info("Photon: lat=%s lng=%s", lat, lng)
 
         row = _build_insert_row(extracted=e, lat=lat, lng=lng, default_typ=args.default_typ)
 

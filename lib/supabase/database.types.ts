@@ -50,6 +50,7 @@ export type Database = {
           bietet_kleidung: boolean
           bietet_medizin: boolean
           bus: string | null
+          capacity_updated_at: string
           created_at: string
           created_by: string | null
           email: string[] | null
@@ -93,6 +94,7 @@ export type Database = {
           bietet_kleidung?: boolean
           bietet_medizin?: boolean
           bus?: string | null
+          capacity_updated_at?: string
           created_at?: string
           created_by?: string | null
           email?: string[] | null
@@ -136,6 +138,7 @@ export type Database = {
           bietet_kleidung?: boolean
           bietet_medizin?: boolean
           bus?: string | null
+          capacity_updated_at?: string
           created_at?: string
           created_by?: string | null
           email?: string[] | null

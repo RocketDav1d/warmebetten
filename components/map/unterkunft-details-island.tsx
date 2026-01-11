@@ -58,6 +58,20 @@ export function UnterkunftDetailsIsland({
     unterkunft.oeffnung_bis
   );
 
+  const capacityUpdated = (() => {
+    try {
+      return new Date(unterkunft.capacity_updated_at).toLocaleString("de-DE", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return unterkunft.capacity_updated_at;
+    }
+  })();
+
   const offers: { key: string; label: string }[] = [
     unterkunft.bietet_essen ? { key: "essen", label: "Essen" } : null,
     unterkunft.bietet_dusche ? { key: "dusche", label: "Dusche" } : null,
@@ -102,6 +116,13 @@ export function UnterkunftDetailsIsland({
       </CardHeader>
 
       <CardContent className="space-y-4">
+        <div className="space-y-1">
+          <div className="text-sm font-semibold">Kapazität</div>
+          <div className="text-sm text-muted-foreground">
+            Aktualisiert: {capacityUpdated}
+          </div>
+        </div>
+
         {timeRange && (
           <div className="space-y-1">
             <div className="text-sm font-semibold">Öffnungszeiten</div>

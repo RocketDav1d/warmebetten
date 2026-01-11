@@ -36,7 +36,7 @@ class UnterkunftTyp(str, Enum):
     tagesangebote = "tagesangebote"
     essen_verpflegung = "essen_verpflegung"
     medizinische_hilfen = "medizinische_hilfen"
-    suchangebote = "suchtangebote"
+    suchtangebote = "suchtangebote"
     beratung = "beratung"
     hygiene = "hygiene"
     kleiderkammer = "kleiderkammer"

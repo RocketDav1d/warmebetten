@@ -18,7 +18,7 @@ export function LeftIsland() {
           <div className="space-y-1">
             <CardTitle className="text-base leading-none">🛌 warmebetten.berlin</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Karte für Unterkünfte & Angebote in Berlin
+              Karte für Unterkünfte & Betten in Berlin
             </p>
           </div>
           <ThemeSwitcher /> 

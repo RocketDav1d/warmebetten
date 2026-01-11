@@ -50,6 +50,9 @@ Wichtige Regeln:
 - Extrahiere nur Informationen, die im Text explizit vorkommen. Nichts erfinden.
 - Wenn ein Feld nicht im Text steht, nutze null.
 - Normalisiere Telefonnummern nicht aggressiv; übernimm sie möglichst originalgetreu.
+
+Wichtig:
+- `plaetze_frei_aktuell` (aktuell freie Plätze / Betten frei) ist Live-Information und kann nicht aus dem PDF extrahiert werden.
 """
 
 logger = logging.getLogger("extract_shelters_structured")

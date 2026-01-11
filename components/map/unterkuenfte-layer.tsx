@@ -20,6 +20,7 @@ export type UnterkunftForMap = Pick<
   | "betten_frei"
   | "plaetze_frei"
   | "plaetze_frei_aktuell"
+  | "capacity_updated_at"
   | "telefon"
   | "email"
   | "website"
@@ -68,6 +69,21 @@ function getAvailabilityStyle(bettenFrei: boolean | null) {
   return { color: null as string | null, glow: undefined };
 }
 
+function formatUpdatedAt(value: string | null) {
+  if (!value) return null;
+  try {
+    return new Date(value).toLocaleString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return value;
+  }
+}
+
 export function UnterkuenfteLayer({
   unterkuenfte,
   onSelect,
@@ -101,6 +117,8 @@ export function UnterkuenfteLayer({
               ? `${free} frei`
               : "Keine freien Plätze";
 
+        const updated = formatUpdatedAt(u.capacity_updated_at ?? null);
+
         return (
           <MapMarker
             key={u.id}
@@ -131,6 +149,11 @@ export function UnterkuenfteLayer({
               <div className="min-w-[180px] space-y-0.5">
                 <div className="font-semibold">{u.name}</div>
                 <div className="text-[11px] opacity-90">{statusLine}</div>
+                {updated && (
+                  <div className="text-[11px] opacity-75">
+                    Kapazität: {updated}
+                  </div>
+                )}
                 <div className="text-[11px] opacity-80">{u.adresse}</div>
               </div>
             </MarkerTooltip>
