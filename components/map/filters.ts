@@ -13,6 +13,7 @@ export type MapFilters = {
   bettenFrei: BettenFreiFilter;
   openFrom: string; // "HH:MM" or ""
   openTo: string; // "HH:MM" or ""
+  showMobile: boolean;
   offers: {
     bietet_essen: boolean;
     bietet_dusche: boolean;
@@ -29,6 +30,7 @@ export const DEFAULT_FILTERS: MapFilters = {
   bettenFrei: "any",
   openFrom: "",
   openTo: "",
+  showMobile: false,
   offers: {
     bietet_essen: false,
     bietet_dusche: false,
@@ -127,6 +129,7 @@ export function filtersFromSearchParams(sp: URLSearchParams): MapFilters {
 
   const openFrom = sp.get("openFrom") ?? "";
   const openTo = sp.get("openTo") ?? "";
+  const showMobile = sp.get("mobile") === "1";
 
   const typ = sp.getAll("typ") as UnterkunftTyp[];
   const bezirk = sp.getAll("bezirk") as BerlinBezirk[];
@@ -145,6 +148,7 @@ export function filtersFromSearchParams(sp: URLSearchParams): MapFilters {
     bettenFrei,
     openFrom,
     openTo,
+    showMobile,
     typ,
     bezirk,
     offers,
@@ -159,6 +163,7 @@ export function searchParamsFromFilters(filters: MapFilters): URLSearchParams {
   if (filters.bettenFrei !== "any") sp.set("betten", filters.bettenFrei);
   if (filters.openFrom) sp.set("openFrom", filters.openFrom);
   if (filters.openTo) sp.set("openTo", filters.openTo);
+  if (filters.showMobile) sp.set("mobile", "1");
 
   for (const t of filters.typ) sp.append("typ", t);
   for (const b of filters.bezirk) sp.append("bezirk", b);

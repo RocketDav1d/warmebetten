@@ -8,6 +8,7 @@ import { UnterkuenfteLayer, type UnterkunftForMap } from "@/components/map/unter
 import { UnterkunftDetailsIsland } from "@/components/map/unterkunft-details-island";
 import { applyMapFilters, filtersFromSearchParams } from "@/components/map/filters";
 import { BezirkeLayer } from "@/components/map/bezirke-layer";
+import { MobileOffersIsland } from "@/components/map/mobile-offers-island";
 
 const BERLIN_CENTER: [number, number] = [13.405, 52.52];
 const BERLIN_BOUNDS: [[number, number], [number, number]] = [
@@ -30,6 +31,13 @@ export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }
     () => applyMapFilters(unterkuenfte, filters),
     [unterkuenfte, filters]
   );
+
+  const mobileOffers = useMemo(() => {
+    if (!filters.showMobile) return [];
+    // For mobile offers, apply the same filters, but ignore bezirk (many are not tied to a district).
+    const mobileOnly = unterkuenfte.filter((u) => u.is_mobile);
+    return applyMapFilters(mobileOnly, { ...filters, bezirk: [] });
+  }, [unterkuenfte, filters]);
 
   const selected = useMemo(
     () => filtered.find((u) => u.id === selectedId) ?? null,
@@ -60,6 +68,14 @@ export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }
         unterkuenfte={filtered}
         onSelect={(u) => setSelectedId(u.id)}
       />
+
+      {filters.showMobile && (
+        <div className="pointer-events-none absolute inset-0 z-10 p-3 sm:p-4">
+          <div className="pointer-events-auto absolute bottom-3 right-3 sm:bottom-4 sm:right-4">
+            <MobileOffersIsland unterkuenfte={mobileOffers} />
+          </div>
+        </div>
+      )}
 
       {selected && (
         <div className="pointer-events-none absolute inset-0 z-10 p-3 sm:p-4">

@@ -202,6 +202,14 @@ export function FiltersPanel() {
         </div>
       </div>
 
+      <label className="flex items-center gap-2">
+        <Checkbox
+          checked={filters.showMobile}
+          onCheckedChange={() => commit({ ...filters, showMobile: !filters.showMobile })}
+        />
+        <span className="text-sm">📍 Mobile Angebote</span>
+      </label>
+
       <div className="space-y-2">
         <div className="text-sm font-medium">Bezirk</div>
         <div className="grid grid-cols-1 gap-2">
@@ -230,6 +238,28 @@ export function FiltersPanel() {
               </label>
             );
           })}
+        </div>
+      </div>
+
+      <div className="space-y-2 rounded-md border bg-muted/30 p-3">
+        <div className="text-sm font-medium">Ausstattung</div>
+        <div className="grid grid-cols-1 gap-2">
+          {OFFER_META.map((o) => (
+            <label key={o.key} className="flex items-center gap-2">
+              <Checkbox
+                checked={filters.offers[o.key]}
+                onCheckedChange={() =>
+                  commit({
+                    ...filters,
+                    offers: { ...filters.offers, [o.key]: !filters.offers[o.key] },
+                  })
+                }
+              />
+              <span className="text-sm">
+                {o.emoji} {o.label}
+              </span>
+            </label>
+          ))}
         </div>
       </div>
 
@@ -281,28 +311,6 @@ export function FiltersPanel() {
         <div className="text-xs text-muted-foreground">
           Filtert Angebote, deren Öffnungszeit das Zeitfenster vollständig abdeckt (auch über
           Mitternacht).
-        </div>
-      </div>
-
-      <div className="space-y-2 rounded-md border bg-muted/30 p-3">
-        <div className="text-sm font-medium">Ausstattung</div>
-        <div className="grid grid-cols-1 gap-2">
-          {OFFER_META.map((o) => (
-            <label key={o.key} className="flex items-center gap-2">
-              <Checkbox
-                checked={filters.offers[o.key]}
-                onCheckedChange={() =>
-                  commit({
-                    ...filters,
-                    offers: { ...filters.offers, [o.key]: !filters.offers[o.key] },
-                  })
-                }
-              />
-              <span className="text-sm">
-                {o.emoji} {o.label}
-              </span>
-            </label>
-          ))}
         </div>
       </div>
 
