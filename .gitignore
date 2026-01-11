@@ -41,3 +41,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .venv/
+
+# extraction results (keep .gitkeep, ignore actual JSON outputs)
+scripts/results/*.json
+shelters.structured.json

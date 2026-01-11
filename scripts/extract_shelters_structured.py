@@ -4,6 +4,7 @@ import argparse
 import json
 import logging
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterable, Type
 
@@ -98,12 +99,26 @@ def _dedupe_entries(entries: Iterable[dict]) -> list[dict]:
     return out
 
 
+def _generate_output_path() -> Path:
+    """
+    Generate a timestamped output path in scripts/results/.
+    """
+    results_dir = Path(__file__).resolve().parent / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    return results_dir / f"shelters_{timestamp}.json"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--pdf", default="shelter.pdf")
     parser.add_argument("--schema", default="scripts.schema_example:UnterkuenfteExtraction")
     parser.add_argument("--model", default="gpt-4o-2024-08-06")
-    parser.add_argument("--out", default="shelters.structured.json")
+    parser.add_argument(
+        "--out",
+        default=None,
+        help="Output file path. If not set, auto-generates a timestamped file in scripts/results/.",
+    )
     parser.add_argument("--start-page", type=int, default=4, help="1-indexed, inclusive")
     parser.add_argument("--end-page", type=int, default=24, help="1-indexed, inclusive")
     parser.add_argument("--min-page-chars", type=int, default=0, help="Skip pages with less extracted text")
@@ -207,7 +222,8 @@ def main() -> None:
     final_obj = schema_cls.model_validate({"unterkuenfte": merged}) if hasattr(schema_cls, "model_validate") else schema_cls.parse_obj({"unterkuenfte": merged})  # type: ignore[attr-defined]
     result = _to_jsonable(final_obj)
 
-    out_path = Path(args.out)
+    out_path = Path(args.out) if args.out else _generate_output_path()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     logger.info("Wrote %s (unterkuenfte=%s)", out_path, len(merged))
 

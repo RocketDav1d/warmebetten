@@ -25,22 +25,44 @@ class BerlinBezirk(str, Enum):
     reinickendorf = "reinickendorf"
 
 
+class UnterkunftTyp(str, Enum):
+    """
+    Mirrors enum `public.unterkunft_typ` from migration:
+    `supabase/migrations/20260110000003_add_unterkunft_typ.sql`
+    """
+
+    notuebernachtung = "notuebernachtung"
+    nachtcafe = "nachtcafe"
+    tagesangebote = "tagesangebote"
+    essen_verpflegung = "essen_verpflegung"
+    medizinische_hilfen = "medizinische_hilfen"
+    suchangebote = "suchtangebote"
+    beratung = "beratung"
+    hygiene = "hygiene"
+    kleiderkammer = "kleiderkammer"
+
+
 class Unterkunft(BaseModel):
     """
-    Example schema aligned to `public.unterkuenfte` from:
-    `supabase/migrations/20260109000001_init_warmebetten.sql`
+    Extraction schema (LLM output) aligned to the **content columns** of `public.unterkuenfte`.
+
+    Current SQL shape comes from:
+    - `supabase/migrations/20260109000001_init_warmebetten.sql`
+    - `supabase/migrations/20260110000002_unterkunft_register_tables_and_nullable_coords.sql` (lat/lng nullable)
+    - `supabase/migrations/20260110000003_add_unterkunft_typ.sql` (adds `typ`)
 
     Notes for extraction:
-    - Some DB columns are NOT NULL (e.g. lat/lng) but in PDFs they may be missing.
-      We keep them optional here to avoid hallucinations; you can enforce NOT NULL later.
+    - We keep many fields nullable to avoid hallucinations. The DB has defaults/NOT NULL
+      constraints; you can map null -> defaults at insert time.
     """
 
     model_config = ConfigDict(extra="forbid")
 
     # location / display
     bezirk: BerlinBezirk | None = None
+    typ: UnterkunftTyp | None = None
     name: str = Field(description="Name of the offer/shelter")
-    adresse: str | None = Field(default=None, description="Full address as shown in the source")
+    adresse: str = Field(description="Full address as shown in the source")
     strasse: str | None = None
 
     u_bahn_station: str | None = None
@@ -48,7 +70,7 @@ class Unterkunft(BaseModel):
     bus: str | None = None
 
     # contact / public info
-    telefon: str | None = None
+    telefon: list[str] | None = None
     email: str | None = None
     website: str | None = None
     verantwortliche_personen: list[str] | None = None
@@ -58,6 +80,7 @@ class Unterkunft(BaseModel):
     oeffnung_von: time | None = None
     oeffnung_bis: time | None = None
     letzter_einlass: time | None = None
+    general_opening_hours: str | None = None
 
     # kälte-/wärmebus can come between...
     kaelte_waerme_bus_kann_kommen_von: time | None = None
@@ -80,9 +103,6 @@ class Unterkunft(BaseModel):
     kapazitaet_max_allgemein: int | None = Field(default=None, ge=0)
     kapazitaet_max_frauen: int | None = Field(default=None, ge=0)
     kapazitaet_max_maenner: int | None = Field(default=None, ge=0)
-
-    # source of truth: free spots right now
-    plaetze_frei_aktuell: int | None = Field(default=None, ge=0)
 
 
 class UnterkuenfteExtraction(BaseModel):
