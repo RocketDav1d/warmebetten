@@ -2,6 +2,7 @@ import { BerlinMap } from "@/components/map/berlin-map";
 import { LeftIsland } from "@/components/map/left-island";
 import type { UnterkunftForMap } from "@/components/map/unterkuenfte-layer";
 import { getSupabaseEnv, hasEnvVars } from "@/lib/utils";
+import { Suspense } from "react";
 
 export default async function Home() {
   // NOTE: We intentionally do a public PostgREST fetch here (instead of the SSR
@@ -37,11 +38,15 @@ export default async function Home() {
     <main className="h-dvh w-screen overflow-hidden">
       <div className="relative h-full w-full">
         {/* Full-screen map */}
-        <BerlinMap unterkuenfte={unterkuenfte ?? []} />
+        <Suspense fallback={null}>
+          <BerlinMap unterkuenfte={unterkuenfte ?? []} />
+        </Suspense>
 
         {/* Hovering UI (doesn't block map except where needed) */}
         <div className="pointer-events-none absolute inset-0 z-20 p-3 sm:p-4">
-          <LeftIsland />
+          <Suspense fallback={null}>
+            <LeftIsland />
+          </Suspense>
         </div>
       </div>
     </main>

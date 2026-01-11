@@ -38,6 +38,31 @@ export const DEFAULT_FILTERS: MapFilters = {
   },
 };
 
+// Used for UI labels and to map enum values -> GeoJSON `Gemeinde_name`.
+export const BEZIRK_LABELS: Record<BerlinBezirk, string> = {
+  mitte: "Mitte",
+  friedrichshain_kreuzberg: "Friedrichshain-Kreuzberg",
+  pankow: "Pankow",
+  charlottenburg_wilmersdorf: "Charlottenburg-Wilmersdorf",
+  spandau: "Spandau",
+  steglitz_zehlendorf: "Steglitz-Zehlendorf",
+  tempelhof_schoeneberg: "Tempelhof-Schöneberg",
+  neukoelln: "Neukölln",
+  treptow_koepenick: "Treptow-Köpenick",
+  marzahn_hellersdorf: "Marzahn-Hellersdorf",
+  lichtenberg: "Lichtenberg",
+  reinickendorf: "Reinickendorf",
+};
+
+export function bezirkNamesForGeoJson(bezirke: BerlinBezirk[]): string[] {
+  return bezirke.map((b) => BEZIRK_LABELS[b]).filter(Boolean);
+}
+
+export function bezirkFromGeoJsonName(name: string): BerlinBezirk | null {
+  const entry = Object.entries(BEZIRK_LABELS).find(([, label]) => label === name);
+  return (entry?.[0] as BerlinBezirk | undefined) ?? null;
+}
+
 function parseTimeHHMM(value: string): number | null {
   const s = value.trim();
   if (!s) return null;

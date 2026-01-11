@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Checkbox } from "@/components/ui/checkbox";
@@ -9,7 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import type { Database } from "@/lib/supabase/database.types";
 import {
+  BEZIRK_LABELS,
   DEFAULT_FILTERS,
+  bezirkFromGeoJsonName,
   filtersFromSearchParams,
   searchParamsFromFilters,
   type MapFilters,
@@ -29,21 +31,6 @@ const TYPE_OPTIONS: Array<{ value: UnterkunftTyp; label: string; emoji: string }
   { value: "hygiene", label: "Hygiene", emoji: "🚿" },
   { value: "kleiderkammer", label: "Kleiderkammer", emoji: "👕" },
 ];
-
-const BEZIRK_LABELS: Record<BerlinBezirk, string> = {
-  mitte: "Mitte",
-  friedrichshain_kreuzberg: "Friedrichshain-Kreuzberg",
-  pankow: "Pankow",
-  charlottenburg_wilmersdorf: "Charlottenburg-Wilmersdorf",
-  spandau: "Spandau",
-  steglitz_zehlendorf: "Steglitz-Zehlendorf",
-  tempelhof_schoeneberg: "Tempelhof-Schöneberg",
-  neukoelln: "Neukölln",
-  treptow_koepenick: "Treptow-Köpenick",
-  marzahn_hellersdorf: "Marzahn-Hellersdorf",
-  lichtenberg: "Lichtenberg",
-  reinickendorf: "Reinickendorf",
-};
 
 const BEZIRK_OPTIONS = Object.entries(BEZIRK_LABELS).map(([value, label]) => ({
   value: value as BerlinBezirk,
@@ -68,11 +55,99 @@ export function FiltersPanel() {
   const searchParams = useSearchParams();
 
   const [filters, setFilters] = useState<MapFilters>(DEFAULT_FILTERS);
+  const didAutoSelectBezirk = useRef(false);
 
   // Hydrate local state from URL (and keep in sync).
   useEffect(() => {
     setFilters(filtersFromSearchParams(new URLSearchParams(searchParams.toString())));
   }, [searchParams]);
+
+  // Default bezirk: if none selected yet, use the user's current location (once).
+  useEffect(() => {
+    if (didAutoSelectBezirk.current) return;
+    didAutoSelectBezirk.current = true;
+
+    const sp = new URLSearchParams(searchParams.toString());
+    if (sp.getAll("bezirk").length > 0) return; // user already selected
+    if (!("geolocation" in navigator)) return;
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const lng = pos.coords.longitude;
+          const lat = pos.coords.latitude;
+
+          const res = await fetch("/api/bezirke", { cache: "force-cache" });
+          if (!res.ok) return;
+          const geo = (await res.json()) as any;
+          const features = Array.isArray(geo?.features) ? geo.features : [];
+
+          const hitName = findBezirkNameForPoint(features, lng, lat);
+          if (!hitName) return;
+
+          const enumValue = bezirkFromGeoJsonName(hitName);
+          if (!enumValue) return;
+
+          // Don't overwrite if the user selected in the meantime.
+          const spNow = new URLSearchParams(window.location.search);
+          if (spNow.getAll("bezirk").length > 0) return;
+
+          const next = { ...filtersFromSearchParams(spNow), bezirk: [enumValue] };
+          const nextSp = searchParamsFromFilters(next);
+          const href = nextSp.toString() ? `${pathname}?${nextSp.toString()}` : pathname;
+          router.replace(href, { scroll: false });
+        } catch {
+          // ignore
+        }
+      },
+      () => {
+        // ignore permission denied / unavailable
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 5 * 60 * 1000 }
+    );
+  }, [pathname, router, searchParams]);
+
+  function pointInRing(point: [number, number], ring: [number, number][]) {
+    // Ray casting algorithm. point: [lng, lat]
+    const [x, y] = point;
+    let inside = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const xi = ring[i][0],
+        yi = ring[i][1];
+      const xj = ring[j][0],
+        yj = ring[j][1];
+      const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0) + xi;
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+
+  function pointInPolygon(point: [number, number], polygon: [number, number][][]) {
+    // polygon: [outerRing, hole1, hole2, ...]
+    if (polygon.length === 0) return false;
+    if (!pointInRing(point, polygon[0])) return false;
+    for (let i = 1; i < polygon.length; i++) {
+      if (pointInRing(point, polygon[i])) return false;
+    }
+    return true;
+  }
+
+  function findBezirkNameForPoint(features: any[], lng: number, lat: number): string | null {
+    const point: [number, number] = [lng, lat];
+    for (const f of features) {
+      const name = f?.properties?.Gemeinde_name;
+      const geom = f?.geometry;
+      if (typeof name !== "string" || !geom) continue;
+      if (geom.type === "Polygon") {
+        if (pointInPolygon(point, geom.coordinates)) return name;
+      } else if (geom.type === "MultiPolygon") {
+        for (const poly of geom.coordinates ?? []) {
+          if (pointInPolygon(point, poly)) return name;
+        }
+      }
+    }
+    return null;
+  }
 
   const isDirty = useMemo(() => {
     const base = JSON.stringify(DEFAULT_FILTERS);
@@ -130,6 +205,14 @@ export function FiltersPanel() {
       <div className="space-y-2">
         <div className="text-sm font-medium">Bezirk</div>
         <div className="grid grid-cols-1 gap-2">
+          <label className="flex items-center gap-2">
+            <Checkbox
+              checked={filters.bezirk.length === 0}
+              onCheckedChange={() => commit({ ...filters, bezirk: [] })}
+            />
+            <span className="text-sm">Alle Bezirke</span>
+          </label>
+          <div className="h-px bg-border/60 my-1" />
           {BEZIRK_OPTIONS.map((b) => {
             const checked = filters.bezirk.includes(b.value);
             return (

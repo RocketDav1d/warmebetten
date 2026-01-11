@@ -7,11 +7,14 @@ import { Map, MapControls } from "@/components/ui/map";
 import { UnterkuenfteLayer, type UnterkunftForMap } from "@/components/map/unterkuenfte-layer";
 import { UnterkunftDetailsIsland } from "@/components/map/unterkunft-details-island";
 import { applyMapFilters, filtersFromSearchParams } from "@/components/map/filters";
+import { BezirkeLayer } from "@/components/map/bezirke-layer";
 
 const BERLIN_CENTER: [number, number] = [13.405, 52.52];
 const BERLIN_BOUNDS: [[number, number], [number, number]] = [
-  [13.0884, 52.3383], // SW
-  [13.7611, 52.6755], // NE
+  // Slightly padded beyond the strict Berlin bbox so markers near the edge
+  // (and minor geocoding inaccuracies) remain reachable via panning.
+  [12.95, 52.30], // SW
+  [13.90, 52.73], // NE
 ];
 
 export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }) {
@@ -50,6 +53,8 @@ export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }
       pitchWithRotate={false}
     >
       <MapControls showZoom showLocate showFullscreen />
+
+      <BezirkeLayer selectedBezirke={filters.bezirk} />
 
       <UnterkuenfteLayer
         unterkuenfte={filtered}
