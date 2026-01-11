@@ -34,6 +34,9 @@ export function LeftIsland() {
         <Separator className="mb-2" />
 
         <section className="space-y-3">
+          <div className="rounded bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+            <span className="font-semibold">Betreiber:innen</span> von Unterkünften können sich registrieren, ihre Unterkunft beanspruchen und anschließend live Kapazitäten sowie weitere Daten verwalten.
+          </div>
           <Suspense
             fallback={
               <div className="flex w-full gap-2">
