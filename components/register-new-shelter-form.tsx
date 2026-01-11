@@ -257,7 +257,7 @@ export function RegisterNewShelterForm() {
       });
       if (error) throw error;
 
-      router.push("/auth/sign-up-success");
+      router.push(`/auth/sign-up-success?email=${encodeURIComponent(email)}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler");
     } finally {
