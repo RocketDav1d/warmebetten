@@ -38,64 +38,21 @@ bun run supabase -- db push
 
 If `supabase` says "command not found", **do not** run `supabase ...` directly—use the `bun run supabase -- ...` form above (it picks up `node_modules/.bin`).
 
-## Drizzle ORM vs Supabase migrations (source of truth)
+## Source of truth: Supabase SQL migrations
 
-This repo currently uses **both**:
+From now on, schema changes are made **directly in Supabase via SQL**, and tracked in:
 
-- `supabase/migrations/*`: authoritative for the **Supabase database** (tables + RLS/policies/triggers/grants).
-- `lib/db/schema.ts`: authoritative for the **app's table model + types** (Drizzle ORM).
-- `drizzle/*`: generated SQL migrations from `lib/db/schema.ts` (useful for local DBs or if you decide to let Drizzle manage your Supabase DB schema).
+- `supabase/migrations/*`
 
-### Recommendation (practical)
-
-- If your production DB is Supabase: **apply `supabase/migrations/*`** (Dashboard SQL editor or `supabase db push`) and keep `lib/db/schema.ts` in sync.
-- Only use **Drizzle `db:migrate` against the Supabase DB** if you intentionally want Drizzle to manage schema changes there. In that case, baseline correctly first (see below) and be aware that Supabase RLS/policies/triggers are *not* expressed in Drizzle by default.
-
-Drizzle is configured for:
-
-- **Schema**: `lib/db/schema.ts`
-- **Config**: `drizzle.config.ts`
-- **Migrations output**: `drizzle/`
-
-You need a Postgres connection string:
-
-- Set `DATABASE_URL` to your Supabase Postgres connection string (Dashboard → Project Settings → Database → Connection string).
-  - Put it into `.env.local` so both Next.js and drizzle-kit can use it.
-
-Scripts:
-
-```bash
-# generate migrations from lib/db/schema.ts changes
-bun run db:generate
-
-# one-time: if your database already has the tables, baseline the initial migration
-# so `db:migrate` won't try to CREATE TABLE again
-bun run db:baseline
-
-# apply generated migrations to DATABASE_URL
-bun run db:migrate
-
-# optional: Drizzle Studio UI
-bun run db:studio
-```
-
-Important note about Supabase RLS:
-- If `DATABASE_URL` uses the `postgres` user, it can bypass RLS. Keep using `@supabase/supabase-js` for user-scoped operations that rely on RLS.
-
-### Baselining Drizzle against an existing Supabase schema
-
-If you created your DB via `supabase/migrations/*` and later want to use Drizzle migrations (`db:migrate`) against the same database, you must **baseline** Drizzle so it doesn't try to re-create existing tables.
-
-This repo includes `scripts/db_baseline_drizzle.mjs`, but note it baselines to the **latest local migration** (whatever is currently in `drizzle/meta/_journal.json`). If you run it *after* generating new migrations, it can accidentally baseline past them (so they won't run).
-
-If you see errors like `EHOSTUNREACH ... 2a05:...:5432`, that's usually IPv6 connectivity. The `db:*` scripts are configured to prefer IPv4.
+Apply via Supabase Dashboard SQL editor or via Supabase CLI `db push`.
 
 ## Betreiber-Registrierung (Shelter Claim / Admin Approval)
 
-This flow uses two extra tables (defined in `lib/db/schema.ts`):
+This flow uses these tables (created via `supabase/migrations/*`):
 
 - `unterkunft_email_whitelist` (maps shelter → allowed emails; stored normalized lowercase)
 - `unterkunft_applications` (pending/approved/rejected)
+- `unterkunft_submissions` (new shelter submissions; admin approval required)
 
 Server-side endpoints require a Supabase service role key:
 

@@ -22,7 +22,7 @@ export default function AppleIcon() {
           lineHeight: 1,
         }}
       >
-        🛏️
+        🛌
       </div>
     ),
     {

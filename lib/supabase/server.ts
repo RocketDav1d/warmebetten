@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { getSupabaseEnv } from "@/lib/utils";
+import type { Database } from "@/lib/supabase/database.types";
 
 /**
  * Especially important if using Fluid compute: Don't put this client in a
@@ -17,7 +18,7 @@ export async function createClient() {
     );
   }
 
-  return createServerClient(
+  return createServerClient<Database>(
     url,
     key,
     {

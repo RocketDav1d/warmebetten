@@ -86,7 +86,11 @@ def _dedupe_entries(entries: Iterable[dict]) -> list[dict]:
     for e in entries:
         name = (e.get("name") or "").strip().lower()
         adresse = (e.get("adresse") or "").strip().lower()
-        telefon = (e.get("telefon") or "").strip().lower()
+        telefon_raw = e.get("telefon")
+        if isinstance(telefon_raw, list):
+            telefon = ",".join(sorted(str(t).strip().lower() for t in telefon_raw))
+        else:
+            telefon = (telefon_raw or "").strip().lower()
         key = "|".join([name, adresse, telefon]).strip("|")
         if not key:
             # If everything is missing, keep it (shouldn't happen with strict schema)

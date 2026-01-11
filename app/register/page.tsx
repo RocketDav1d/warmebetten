@@ -3,6 +3,7 @@ import { Suspense } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 import { hasEnvVars } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RegisterProviderForm } from "@/components/register-provider-form";
 
@@ -71,7 +72,17 @@ async function RegisterPageContent() {
                 Fehler beim Laden der Unterkünfte: {error.message}
               </div>
             ) : (
-              <RegisterProviderForm shelters={shelters ?? []} />
+              <div className="space-y-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="text-sm text-muted-foreground">
+                    Oder: neue Unterkunft einreichen (Admin-Freigabe erforderlich)
+                  </div>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href="/register/new">Neue Unterkunft hinzufügen</Link>
+                  </Button>
+                </div>
+                <RegisterProviderForm shelters={shelters ?? []} />
+              </div>
             )}
           </CardContent>
         </Card>

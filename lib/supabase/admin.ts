@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
 
 function decodeBase64Url(input: string) {
   const base64 = input.replace(/-/g, "+").replace(/_/g, "/");
@@ -52,7 +53,7 @@ export function createAdminClient() {
   if (problem) throw new Error(problem);
 
   // At this point both vars are present (checked by getServiceRoleProblem()).
-  return createClient(url!, serviceRoleKey!, {
+  return createClient<Database>(url!, serviceRoleKey!, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,

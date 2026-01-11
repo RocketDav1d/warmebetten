@@ -22,7 +22,7 @@ export default function Icon() {
           lineHeight: 1,
         }}
       >
-        🛏️
+        🛌
       </div>
     ),
     {
