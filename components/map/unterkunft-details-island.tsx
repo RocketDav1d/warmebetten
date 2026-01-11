@@ -46,12 +46,15 @@ export function UnterkunftDetailsIsland({
   unterkunft: UnterkunftForMap;
   onClose: () => void;
 }) {
-  const free =
-    typeof unterkunft.plaetze_frei === "number"
-      ? unterkunft.plaetze_frei
-      : typeof unterkunft.plaetze_frei_aktuell === "number"
-        ? unterkunft.plaetze_frei_aktuell
-        : null;
+  const kapMax = (unterkunft as any).kapazitaet_max_allgemein as number | null | undefined;
+  const canHaveCapacity = typeof kapMax === "number" ? kapMax > 0 : false;
+  const hasCapacityData = canHaveCapacity && unterkunft.betten_frei != null;
+
+  const free = hasCapacityData
+    ? typeof unterkunft.plaetze_frei_aktuell === "number"
+      ? unterkunft.plaetze_frei_aktuell
+      : null
+    : null;
 
   const timeRange = formatTimeRange(
     unterkunft.oeffnung_von,
@@ -106,10 +109,13 @@ export function UnterkunftDetailsIsland({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {free != null && (
+          {hasCapacityData && free != null && (
             <Badge variant={free > 0 ? "default" : "secondary"}>
               {free > 0 ? `${free} Plätze frei` : "Keine Plätze frei"}
             </Badge>
+          )}
+          {canHaveCapacity && !hasCapacityData && (
+            <Badge variant="outline">Kapazität unbekannt</Badge>
           )}
           {unterkunft.is_mobile ? (
             <Badge variant="outline">Mobil</Badge>
@@ -120,12 +126,14 @@ export function UnterkunftDetailsIsland({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <div className="space-y-1">
-          <div className="text-sm font-semibold">Kapazität</div>
-          <div className="text-sm text-muted-foreground">
-            Aktualisiert: {capacityUpdated}
+        {canHaveCapacity && (
+          <div className="space-y-1">
+            <div className="text-sm font-semibold">Kapazität</div>
+            <div className="text-sm text-muted-foreground">
+              Aktualisiert: {hasCapacityData ? capacityUpdated : "—"}
+            </div>
           </div>
-        </div>
+        )}
 
         {timeRange && (
           <div className="space-y-1">

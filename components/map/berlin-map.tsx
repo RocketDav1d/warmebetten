@@ -12,10 +12,12 @@ import { MobileOffersIsland } from "@/components/map/mobile-offers-island";
 
 const BERLIN_CENTER: [number, number] = [13.405, 52.52];
 const BERLIN_BOUNDS: [[number, number], [number, number]] = [
-  // Slightly padded beyond the strict Berlin bbox so markers near the edge
-  // (and minor geocoding inaccuracies) remain reachable via panning.
-  [12.95, 52.30], // SW
-  [13.90, 52.73], // NE
+  // Padded beyond the strict Berlin bbox so:
+  // - markers near the edge (or with minor geocoding inaccuracies) remain reachable
+  // - users can still pan at the *minimum zoom* (when the viewport is very wide),
+  //   even with the left island overlay.
+  [12.75, 52.20], // SW
+  [14.05, 52.85], // NE
 ];
 
 export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }) {

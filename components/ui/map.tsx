@@ -22,6 +22,23 @@ import { X, Minus, Plus, Locate, Maximize, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
 
+function stripMapLibrePopupChrome(popup: MapLibreGL.Popup) {
+  try {
+    const el = popup.getElement();
+    if (!el) return;
+    el.querySelector(".maplibregl-popup-tip")?.remove();
+    const content = el.querySelector(".maplibregl-popup-content") as HTMLElement | null;
+    if (content) {
+      content.style.background = "transparent";
+      content.style.boxShadow = "none";
+      content.style.padding = "0";
+      content.style.borderRadius = "0";
+    }
+  } catch {
+    // ignore
+  }
+}
+
 type MapContextValue = {
   map: MapLibreGL.Map | null;
   isLoaded: boolean;
@@ -347,10 +364,14 @@ function MarkerPopup({
     const popupInstance = new MapLibreGL.Popup({
       offset: 16,
       ...popupOptions,
+      className: "wb-marker-popup",
       closeButton: false,
     })
       .setMaxWidth("none")
       .setDOMContent(container);
+
+    // Remove arrow + default chrome immediately (not only after opening).
+    stripMapLibrePopupChrome(popupInstance);
 
     return popupInstance;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -362,7 +383,14 @@ function MarkerPopup({
     popup.setDOMContent(container);
     marker.setPopup(popup);
 
+    const handleClick = () => {
+      // Popup opens on marker click; strip chrome/tip after it renders.
+      requestAnimationFrame(() => stripMapLibrePopupChrome(popup));
+    };
+    marker.getElement()?.addEventListener("click", handleClick);
+
     return () => {
+      marker.getElement()?.removeEventListener("click", handleClick);
       marker.setPopup(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -386,7 +414,9 @@ function MarkerPopup({
   return createPortal(
     <div
       className={cn(
-        "relative rounded-md border bg-popover p-3 text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95",
+        // Intentionally unstyled container; callers should provide their own UI.
+        // (MapLibre itself wraps this in `.maplibregl-popup-content`.)
+        "relative animate-in fade-in-0 zoom-in-95",
         className
       )}
     >
@@ -412,11 +442,17 @@ type MarkerTooltipProps = {
   children: ReactNode;
   /** Additional CSS classes for the tooltip container */
   className?: string;
+  /**
+   * If true, the tooltip stays open when hovering the tooltip itself (so buttons/links are clickable),
+   * and does not auto-close on click.
+   */
+  interactive?: boolean;
 } & Omit<PopupOptions, "className" | "closeButton" | "closeOnClick">;
 
 function MarkerTooltip({
   children,
   className,
+  interactive = false,
   ...popupOptions
 }: MarkerTooltipProps) {
   const { marker, map } = useMarkerContext();
@@ -427,9 +463,13 @@ function MarkerTooltip({
     const tooltipInstance = new MapLibreGL.Popup({
       offset: 16,
       ...popupOptions,
-      closeOnClick: true,
+      className: "wb-marker-tooltip",
+      closeOnClick: interactive ? false : true,
       closeButton: false,
     }).setMaxWidth("none");
+
+    // Remove arrow + default chrome immediately (not only after opening).
+    stripMapLibrePopupChrome(tooltipInstance);
 
     return tooltipInstance;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -440,21 +480,51 @@ function MarkerTooltip({
 
     tooltip.setDOMContent(container);
 
-    const handleMouseEnter = () => {
-      tooltip.setLngLat(marker.getLngLat()).addTo(map);
+    let closeTimer: number | null = null;
+    const cancelClose = () => {
+      if (closeTimer != null) {
+        window.clearTimeout(closeTimer);
+        closeTimer = null;
+      }
     };
-    const handleMouseLeave = () => tooltip.remove();
+    const scheduleClose = () => {
+      cancelClose();
+      // Small delay so users can move from marker -> popup without it disappearing.
+      closeTimer = window.setTimeout(() => tooltip.remove(), 180);
+    };
+
+    const handleMouseEnter = () => {
+      cancelClose();
+      tooltip.setLngLat(marker.getLngLat()).addTo(map);
+      requestAnimationFrame(() => stripMapLibrePopupChrome(tooltip));
+
+      if (interactive) {
+        const el = tooltip.getElement();
+        el?.addEventListener("mouseenter", cancelClose);
+        el?.addEventListener("mouseleave", scheduleClose);
+      }
+    };
+    const handleMouseLeave = () => {
+      if (interactive) scheduleClose();
+      else tooltip.remove();
+    };
 
     marker.getElement()?.addEventListener("mouseenter", handleMouseEnter);
     marker.getElement()?.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
+      cancelClose();
       marker.getElement()?.removeEventListener("mouseenter", handleMouseEnter);
       marker.getElement()?.removeEventListener("mouseleave", handleMouseLeave);
+      if (interactive) {
+        const el = tooltip.getElement();
+        el?.removeEventListener("mouseenter", cancelClose);
+        el?.removeEventListener("mouseleave", scheduleClose);
+      }
       tooltip.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map]);
+  }, [map, interactive]);
 
   if (tooltip.isOpen()) {
     const prev = prevTooltipOptions.current;
@@ -472,7 +542,8 @@ function MarkerTooltip({
   return createPortal(
     <div
       className={cn(
-        "rounded-md bg-foreground px-2 py-1 text-xs text-background shadow-md animate-in fade-in-0 zoom-in-95",
+        // Intentionally unstyled container; callers should provide their own UI.
+        "animate-in fade-in-0 zoom-in-95",
         className
       )}
     >

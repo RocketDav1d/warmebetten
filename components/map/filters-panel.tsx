@@ -207,7 +207,7 @@ export function FiltersPanel() {
           checked={filters.showMobile}
           onCheckedChange={() => commit({ ...filters, showMobile: !filters.showMobile })}
         />
-        <span className="text-sm">📍 Mobile Angebote</span>
+        <span className="text-sm">🚙 Mobile Angebote</span>
       </label>
 
       <div className="space-y-2">

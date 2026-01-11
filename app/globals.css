@@ -56,11 +56,20 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-  .maplibregl-popup-content {
-    @apply bg-transparent! shadow-none! p-0! rounded-none!;
+  /* MapLibre popups have default white "card" chrome (content + tip).
+     We render our own tooltip/popup UI, so remove that chrome globally. */
+  .maplibregl-popup .maplibregl-popup-content {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
   }
-  .maplibregl-popup-tip {
-    @apply hidden!;
+  .maplibregl-popup .maplibregl-popup-tip {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    border: 0 !important;
   }
 }
 

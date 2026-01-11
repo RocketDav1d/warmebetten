@@ -74,7 +74,6 @@ export type Database = {
           oeffnung_bis: string | null
           oeffnung_von: string | null
           owner_user_id: string | null
-          plaetze_frei: number | null
           plaetze_frei_aktuell: number
           s_bahn_station: string | null
           strasse: string | null
@@ -120,7 +119,6 @@ export type Database = {
           oeffnung_bis?: string | null
           oeffnung_von?: string | null
           owner_user_id?: string | null
-          plaetze_frei?: number | null
           plaetze_frei_aktuell?: number
           s_bahn_station?: string | null
           strasse?: string | null
@@ -166,7 +164,6 @@ export type Database = {
           oeffnung_bis?: string | null
           oeffnung_von?: string | null
           owner_user_id?: string | null
-          plaetze_frei?: number | null
           plaetze_frei_aktuell?: number
           s_bahn_station?: string | null
           strasse?: string | null

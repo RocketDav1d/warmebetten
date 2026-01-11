@@ -74,7 +74,6 @@ grant all on all sequences in schema public to service_role;
   - Source of truth for current capacity is `plaetze_frei_aktuell` (free spots right now)
   - `kapazitaet_belegt` is **generated** from `kapazitaet_max_allgemein - plaetze_frei_aktuell`
   - `betten_frei` is **generated** from `plaetze_frei_aktuell > 0`
-  - `plaetze_frei` is a **generated alias** for `plaetze_frei_aktuell` (convenience/back-compat)
   - `bezirk` is an enum (`public.berlin_bezirk`)
 - `public.profiles`
   - Linked 1:1 to `auth.users`
