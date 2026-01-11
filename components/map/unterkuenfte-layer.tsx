@@ -130,7 +130,7 @@ function MarkerPopupCard({
           <Button asChild size="sm" className="h-8 flex-1">
             <a href={directionsHref} target="_blank" rel="noreferrer">
               <Navigation className="mr-1.5 size-3.5" />
-              Directions
+              Route
             </a>
           </Button>
           {websiteHref && (
