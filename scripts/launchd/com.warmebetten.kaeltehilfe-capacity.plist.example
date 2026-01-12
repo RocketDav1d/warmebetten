@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.warmebetten.kaeltehilfe-capacity</string>
+
+    <key>WorkingDirectory</key>
+    <string>__REPO_ROOT__</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>__REPO_ROOT__/scripts/run_kaeltehilfe_capacity.sh</string>
+      <string>--commit</string>
+    </array>
+
+    <!-- Run once per day at 06:15 local time -->
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key>
+      <integer>6</integer>
+      <key>Minute</key>
+      <integer>15</integer>
+    </dict>
+
+    <!-- Also run on load (optional) -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>__REPO_ROOT__/tmp_logs/kaeltehilfe_capacity.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__REPO_ROOT__/tmp_logs/kaeltehilfe_capacity.err.log</string>
+  </dict>
+</plist>
+
+

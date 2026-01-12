@@ -1,0 +1,674 @@
+{
+  "generated_at": "2026-01-12T11:25:16.986738+00:00",
+  "db": {
+    "typ": "notuebernachtung",
+    "count": 28,
+    "names": [
+      {
+        "id": "c05cb1a6-15b5-463b-9b18-7bb96a0a3fd6",
+        "name": "24/7 Notunterkunft für Frauen Kreuzberg",
+        "norm": "24 7 notunterkunft fuer frauen kreuzberg"
+      },
+      {
+        "id": "ccd69c3e-6d03-4078-8f4e-b6d2d6c4a1b6",
+        "name": "Caritas Kältehilfe Residenzstraße",
+        "norm": "caritas kaeltehilfe residenzstrasse"
+      },
+      {
+        "id": "7b89760a-647a-4853-994e-6ac94d68bbb3",
+        "name": "Kubus Kältehilfe",
+        "norm": "kubus kaeltehilfe"
+      },
+      {
+        "id": "b7a0e59c-356f-4841-ad41-67716e052ed0",
+        "name": "Notübernachtung „Evas Haltestelle“",
+        "norm": "notuebernachtung evas haltestelle"
+      },
+      {
+        "id": "4e82ff9c-bb68-4998-afa0-71894a13e58f",
+        "name": "Notübernachtung „Marie“",
+        "norm": "notuebernachtung marie"
+      },
+      {
+        "id": "40334c2d-0a7e-44a4-acab-14018052fa08",
+        "name": "Notübernachtung am Containerbahnhof",
+        "norm": "notuebernachtung am containerbahnhof"
+      },
+      {
+        "id": "4428e15b-21eb-4a06-802f-d56a1058222d",
+        "name": "Notübernachtung am Rathaus Steglitz",
+        "norm": "notuebernachtung am rathaus steglitz"
+      },
+      {
+        "id": "faaa44d2-84ee-49ad-ac58-8dd86ee62ed5",
+        "name": "Notübernachtung AWO Kiez-Café",
+        "norm": "notuebernachtung awo kiez cafe"
+      },
+      {
+        "id": "f6352977-ed63-44af-ada4-727821016b12",
+        "name": "Notübernachtung der Johanniter Ohlauer Straße",
+        "norm": "notuebernachtung der johanniter ohlauer strasse"
+      },
+      {
+        "id": "c586e6d2-387e-4a2b-9e6f-e38751c237cb",
+        "name": "Notübernachtung DRK-Nachtlicht",
+        "norm": "notuebernachtung drk nachtlicht"
+      },
+      {
+        "id": "dfc11d27-4b8b-496c-b04a-f9eb1770eda6",
+        "name": "Notübernachtung Franklinstrasse",
+        "norm": "notuebernachtung franklinstrasse"
+      },
+      {
+        "id": "22609081-5fe1-4b29-bbb2-cc60e72d16cd",
+        "name": "Notübernachtung für Frauen \"Evas Obdach\"",
+        "norm": "notuebernachtung fuer frauen evas obdach"
+      },
+      {
+        "id": "9a4712eb-4d30-4970-a8ef-9c875f14dce3",
+        "name": "Notübernachtung für Frauen „Mitten im Kiez“",
+        "norm": "notuebernachtung fuer frauen mitten im kiez"
+      },
+      {
+        "id": "a337e139-3d3b-423b-b2ca-367aa49a4b96",
+        "name": "Notübernachtung für Frauen der Gebewo Pro gGmbH",
+        "norm": "notuebernachtung fuer frauen der gebewo pro ggmbh"
+      },
+      {
+        "id": "075bcd92-b3a1-409e-9626-2e04514226c8",
+        "name": "Notübernachtung für Wohnungslose Familien",
+        "norm": "notuebernachtung fuer wohnungslose familien"
+      },
+      {
+        "id": "33bb2068-8608-4013-937a-81d654633982",
+        "name": "Notübernachtung Haus Sophie",
+        "norm": "notuebernachtung haus sophie"
+      },
+      {
+        "id": "44ba460d-0b18-41d4-b3c2-9c7945340f09",
+        "name": "Notübernachtung Herberge zur Heimat e. V.",
+        "norm": "notuebernachtung herberge zur heimat e v"
+      },
+      {
+        "id": "b0d59fff-4e3b-4a1a-a612-6d9244cc006b",
+        "name": "Notübernachtung Kopenhagener Straße",
+        "norm": "notuebernachtung kopenhagener strasse"
+      },
+      {
+        "id": "b8d36b91-c9c9-4d8c-8698-7b3742b8c10e",
+        "name": "Notübernachtung Kurmärkische Strasse",
+        "norm": "notuebernachtung kurmaerkische strasse"
+      },
+      {
+        "id": "c85e88e8-2760-454a-ba9c-f05ed0bf5371",
+        "name": "Notübernachtung Lehrter Str.",
+        "norm": "notuebernachtung lehrter str"
+      },
+      {
+        "id": "6844ac72-85b7-4915-8c26-75e1e1d8d772",
+        "name": "Notübernachtung Neustart Berlin GmbH",
+        "norm": "notuebernachtung neustart berlin gmbh"
+      },
+      {
+        "id": "b6d2b909-91e7-4939-872b-0c9066c0e060",
+        "name": "Notübernachtung St. Marien – Liebfrauen",
+        "norm": "notuebernachtung st marien liebfrauen"
+      },
+      {
+        "id": "a525240b-1b9c-480e-92fd-becf229022d3",
+        "name": "Notübernachtung St. Pius / St. Nikolaus",
+        "norm": "notuebernachtung st pius st nikolaus"
+      },
+      {
+        "id": "77b0533b-4ca8-4341-a867-f6df9995d185",
+        "name": "Notübernachtung Strassenfeger",
+        "norm": "notuebernachtung strassenfeger"
+      },
+      {
+        "id": "b8c0e858-5aa9-4302-a1ec-4efb95849af7",
+        "name": "Notübernachtung und Wärmestube Arche",
+        "norm": "notuebernachtung und waermestube arche"
+      },
+      {
+        "id": "f800e727-477c-444a-b52a-1d0ad141994c",
+        "name": "Notübernachtung und Wärmestube Arche",
+        "norm": "notuebernachtung und waermestube arche"
+      },
+      {
+        "id": "6f6299ab-5542-46c3-a52d-262c9c3e47e8",
+        "name": "Notunterkunft für Familien",
+        "norm": "notunterkunft fuer familien"
+      },
+      {
+        "id": "c1faf883-4fbe-49db-8c60-31b8d7542376",
+        "name": "Wohnheim Neustart GmbH",
+        "norm": "wohnheim neustart gmbh"
+      }
+    ]
+  },
+  "kaeltehilfe": {
+    "pages": [
+      {
+        "start": 0,
+        "count": 10,
+        "offers": [
+          {
+            "name": "24/7 Notunterkunft für Frauen Kreuzberg",
+            "norm": "24 7 notunterkunft fuer frauen kreuzberg",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notunterkunft-24-7-fuer-frauen-kreuzberg"
+          },
+          {
+            "name": "Kälteschutz im Mehringhof",
+            "norm": "kaelteschutz im mehringhof",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/kaelteschutz-im-mehringhof"
+          },
+          {
+            "name": "NAC Notübernachtung am Containerbahnhof",
+            "norm": "nac notuebernachtung am containerbahnhof",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-am-containerbahnhof"
+          },
+          {
+            "name": "Nachtcafé Arche",
+            "norm": "nachtcafe arche",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-arche"
+          },
+          {
+            "name": "Nachtcafé der Ev. Fürbitt-Melanchthon-Kirche",
+            "norm": "nachtcafe der ev fuerbitt melanchthon kirche",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-der-ev-philipp-melanchthon-kirche"
+          },
+          {
+            "name": "Nachtcafé der Ev. Taborgemeinde",
+            "norm": "nachtcafe der ev taborgemeinde",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-der-ev-tabor-kirchengemeinde"
+          },
+          {
+            "name": "Nachtcafé der Martin-Luther-Genezareth-Gemeinde",
+            "norm": "nachtcafe der martin luther genezareth gemeinde",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-der-martin-luther-gemeinde-neukoelln"
+          },
+          {
+            "name": "Nachtcafé Herz Jesu",
+            "norm": "nachtcafe herz jesu",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-herz-jesu"
+          },
+          {
+            "name": "Nachtcafé Luisen",
+            "norm": "nachtcafe luisen",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-luisen"
+          },
+          {
+            "name": "Nachtcafé Neu Westend",
+            "norm": "nachtcafe neu westend",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-neu-westend"
+          }
+        ]
+      },
+      {
+        "start": 10,
+        "count": 10,
+        "offers": [
+          {
+            "name": "Nachtcafé Unter Druck",
+            "norm": "nachtcafe unter druck",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-unter-druck"
+          },
+          {
+            "name": "Nachtcafé Zum Guten Hirten",
+            "norm": "nachtcafe zum guten hirten",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nachtcafe-zum-guten-hirten"
+          },
+          {
+            "name": "Notübernachtung - Herberge zur Heimat e.V.",
+            "norm": "notuebernachtung herberge zur heimat e v",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-herberge-zur-heimat-e-v"
+          },
+          {
+            "name": "Notübernachtung am S-Bhf Rathaus Steglitz",
+            "norm": "notuebernachtung am s bhf rathaus steglitz",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-am-s-bhf-rathaus-steglitz"
+          },
+          {
+            "name": "Notübernachtung Caritas Kältehilfe Residenzstraße",
+            "norm": "notuebernachtung caritas kaeltehilfe residenzstrasse",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-residenzstrasse"
+          },
+          {
+            "name": "Notübernachtung der Johanniter Ohlauer Straße",
+            "norm": "notuebernachtung der johanniter ohlauer strasse",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-der-johanniter"
+          },
+          {
+            "name": "Notübernachtung DRK Steglitz-Zehlendorf",
+            "norm": "notuebernachtung drk steglitz zehlendorf",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-drk-steglitz-zehlendorf"
+          },
+          {
+            "name": "Notübernachtung Franklinstraße",
+            "norm": "notuebernachtung franklinstrasse",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-franklinstrasse"
+          },
+          {
+            "name": "Notübernachtung für Frauen \"Evas Obdach\"",
+            "norm": "notuebernachtung fuer frauen evas obdach",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-frauen-evas-obdach"
+          },
+          {
+            "name": "Notübernachtung für Frauen der GEBEWO Pro gGmbH",
+            "norm": "notuebernachtung fuer frauen der gebewo pro ggmbh",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-frauen"
+          }
+        ]
+      },
+      {
+        "start": 20,
+        "count": 10,
+        "offers": [
+          {
+            "name": "Notübernachtung für Frauen DRK-Nachtlicht",
+            "norm": "notuebernachtung fuer frauen drk nachtlicht",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-frauen-drk-nachtlicht"
+          },
+          {
+            "name": "Notübernachtung für Frauen in Evas Haltestelle",
+            "norm": "notuebernachtung fuer frauen in evas haltestelle",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-evas-haltestelle"
+          },
+          {
+            "name": "Notübernachtung für Frauen* ‚Mitten im Kiez‘",
+            "norm": "notuebernachtung fuer frauen mitten im kiez",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-frauen-mitten-im-kiez"
+          },
+          {
+            "name": "Notübernachtung für wohnungslose Familien",
+            "norm": "notuebernachtung fuer wohnungslose familien",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-wohnungslose-familien-am-baerensprung"
+          },
+          {
+            "name": "Notübernachtung Goslarer Platz",
+            "norm": "notuebernachtung goslarer platz",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-goslarer-platz"
+          },
+          {
+            "name": "Notübernachtung Haus Sophie",
+            "norm": "notuebernachtung haus sophie",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-merkur"
+          },
+          {
+            "name": "Notübernachtung Kiez-Café",
+            "norm": "notuebernachtung kiez cafe",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-awo-kiez-cafe"
+          },
+          {
+            "name": "Notübernachtung Kopenhagener Straße",
+            "norm": "notuebernachtung kopenhagener strasse",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-kopenhagener-strasse"
+          },
+          {
+            "name": "Notübernachtung Kubus Kältehilfe",
+            "norm": "notuebernachtung kubus kaeltehilfe",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-kubus-ggmbh-2"
+          },
+          {
+            "name": "Notübernachtung Kurmärkische Str.1-3",
+            "norm": "notuebernachtung kurmaerkische str 1 3",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-kurmaerkische-strasse"
+          }
+        ]
+      },
+      {
+        "start": 30,
+        "count": 9,
+        "offers": [
+          {
+            "name": "Notübernachtung Lehrter Straße",
+            "norm": "notuebernachtung lehrter strasse",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-lehrter-strasse"
+          },
+          {
+            "name": "Notübernachtung Marie",
+            "norm": "notuebernachtung marie",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-marie"
+          },
+          {
+            "name": "Notübernachtung Neustart Berlin GmbH",
+            "norm": "notuebernachtung neustart berlin gmbh",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-neustart-kaeltehilfe"
+          },
+          {
+            "name": "Notübernachtung Neustart GmbH",
+            "norm": "notuebernachtung neustart gmbh",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-neustart-gmbh"
+          },
+          {
+            "name": "Notübernachtung St. Marien Liebfrauen",
+            "norm": "notuebernachtung st marien liebfrauen",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-st-marien-liebfrauen"
+          },
+          {
+            "name": "Notübernachtung St. Pius/ St. Nikolaus",
+            "norm": "notuebernachtung st pius st nikolaus",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-st-pius-st-nikolaus"
+          },
+          {
+            "name": "Notübernachtung Strassenfeger e.V.",
+            "norm": "notuebernachtung strassenfeger e v",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-strassenfeger-e-v"
+          },
+          {
+            "name": "Notunterkunft für Familien",
+            "norm": "notunterkunft fuer familien",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notunterkunft-fuer-wohnungslose-familien"
+          },
+          {
+            "name": "NÜ Home & Care Reinickendorf",
+            "norm": "nue home care reinickendorf",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nue-home-care-reinickendorf"
+          }
+        ]
+      },
+      {
+        "start": 40,
+        "count": 9,
+        "offers": [
+          {
+            "name": "Notübernachtung Lehrter Straße",
+            "norm": "notuebernachtung lehrter strasse",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-lehrter-strasse"
+          },
+          {
+            "name": "Notübernachtung Marie",
+            "norm": "notuebernachtung marie",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-marie"
+          },
+          {
+            "name": "Notübernachtung Neustart Berlin GmbH",
+            "norm": "notuebernachtung neustart berlin gmbh",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-neustart-kaeltehilfe"
+          },
+          {
+            "name": "Notübernachtung Neustart GmbH",
+            "norm": "notuebernachtung neustart gmbh",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-neustart-gmbh"
+          },
+          {
+            "name": "Notübernachtung St. Marien Liebfrauen",
+            "norm": "notuebernachtung st marien liebfrauen",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-st-marien-liebfrauen"
+          },
+          {
+            "name": "Notübernachtung St. Pius/ St. Nikolaus",
+            "norm": "notuebernachtung st pius st nikolaus",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-st-pius-st-nikolaus"
+          },
+          {
+            "name": "Notübernachtung Strassenfeger e.V.",
+            "norm": "notuebernachtung strassenfeger e v",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-strassenfeger-e-v"
+          },
+          {
+            "name": "Notunterkunft für Familien",
+            "norm": "notunterkunft fuer familien",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notunterkunft-fuer-wohnungslose-familien"
+          },
+          {
+            "name": "NÜ Home & Care Reinickendorf",
+            "norm": "nue home care reinickendorf",
+            "url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/nue-home-care-reinickendorf"
+          }
+        ]
+      }
+    ],
+    "unique_offers_count": 39
+  },
+  "matches": {
+    "count": 25,
+    "rows": [
+      {
+        "db_id": "c05cb1a6-15b5-463b-9b18-7bb96a0a3fd6",
+        "db_name": "24/7 Notunterkunft für Frauen Kreuzberg",
+        "db_norm": "24 7 notunterkunft fuer frauen kreuzberg",
+        "kaeltehilfe_name": "24/7 Notunterkunft für Frauen Kreuzberg",
+        "kaeltehilfe_norm": "24 7 notunterkunft fuer frauen kreuzberg",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notunterkunft-24-7-fuer-frauen-kreuzberg",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "ccd69c3e-6d03-4078-8f4e-b6d2d6c4a1b6",
+        "db_name": "Caritas Kältehilfe Residenzstraße",
+        "db_norm": "caritas kaeltehilfe residenzstrasse",
+        "kaeltehilfe_name": "Notübernachtung Caritas Kältehilfe Residenzstraße",
+        "kaeltehilfe_norm": "notuebernachtung caritas kaeltehilfe residenzstrasse",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-residenzstrasse",
+        "match_kind": "tokens"
+      },
+      {
+        "db_id": "7b89760a-647a-4853-994e-6ac94d68bbb3",
+        "db_name": "Kubus Kältehilfe",
+        "db_norm": "kubus kaeltehilfe",
+        "kaeltehilfe_name": "Notübernachtung Kubus Kältehilfe",
+        "kaeltehilfe_norm": "notuebernachtung kubus kaeltehilfe",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-kubus-ggmbh-2",
+        "match_kind": "tokens"
+      },
+      {
+        "db_id": "b7a0e59c-356f-4841-ad41-67716e052ed0",
+        "db_name": "Notübernachtung „Evas Haltestelle“",
+        "db_norm": "notuebernachtung evas haltestelle",
+        "kaeltehilfe_name": "Notübernachtung für Frauen in Evas Haltestelle",
+        "kaeltehilfe_norm": "notuebernachtung fuer frauen in evas haltestelle",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-evas-haltestelle",
+        "match_kind": "tokens"
+      },
+      {
+        "db_id": "4e82ff9c-bb68-4998-afa0-71894a13e58f",
+        "db_name": "Notübernachtung „Marie“",
+        "db_norm": "notuebernachtung marie",
+        "kaeltehilfe_name": "Notübernachtung Marie",
+        "kaeltehilfe_norm": "notuebernachtung marie",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-marie",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "40334c2d-0a7e-44a4-acab-14018052fa08",
+        "db_name": "Notübernachtung am Containerbahnhof",
+        "db_norm": "notuebernachtung am containerbahnhof",
+        "kaeltehilfe_name": "NAC Notübernachtung am Containerbahnhof",
+        "kaeltehilfe_norm": "nac notuebernachtung am containerbahnhof",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-am-containerbahnhof",
+        "match_kind": "tokens"
+      },
+      {
+        "db_id": "4428e15b-21eb-4a06-802f-d56a1058222d",
+        "db_name": "Notübernachtung am Rathaus Steglitz",
+        "db_norm": "notuebernachtung am rathaus steglitz",
+        "kaeltehilfe_name": "Notübernachtung am S-Bhf Rathaus Steglitz",
+        "kaeltehilfe_norm": "notuebernachtung am s bhf rathaus steglitz",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-am-s-bhf-rathaus-steglitz",
+        "match_kind": "tokens"
+      },
+      {
+        "db_id": "faaa44d2-84ee-49ad-ac58-8dd86ee62ed5",
+        "db_name": "Notübernachtung AWO Kiez-Café",
+        "db_norm": "notuebernachtung awo kiez cafe",
+        "kaeltehilfe_name": "Notübernachtung Kiez-Café",
+        "kaeltehilfe_norm": "notuebernachtung kiez cafe",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-awo-kiez-cafe",
+        "match_kind": "fuzzy:0.93"
+      },
+      {
+        "db_id": "f6352977-ed63-44af-ada4-727821016b12",
+        "db_name": "Notübernachtung der Johanniter Ohlauer Straße",
+        "db_norm": "notuebernachtung der johanniter ohlauer strasse",
+        "kaeltehilfe_name": "Notübernachtung der Johanniter Ohlauer Straße",
+        "kaeltehilfe_norm": "notuebernachtung der johanniter ohlauer strasse",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-der-johanniter",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "c586e6d2-387e-4a2b-9e6f-e38751c237cb",
+        "db_name": "Notübernachtung DRK-Nachtlicht",
+        "db_norm": "notuebernachtung drk nachtlicht",
+        "kaeltehilfe_name": "Notübernachtung für Frauen DRK-Nachtlicht",
+        "kaeltehilfe_norm": "notuebernachtung fuer frauen drk nachtlicht",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-frauen-drk-nachtlicht",
+        "match_kind": "tokens"
+      },
+      {
+        "db_id": "dfc11d27-4b8b-496c-b04a-f9eb1770eda6",
+        "db_name": "Notübernachtung Franklinstrasse",
+        "db_norm": "notuebernachtung franklinstrasse",
+        "kaeltehilfe_name": "Notübernachtung Franklinstraße",
+        "kaeltehilfe_norm": "notuebernachtung franklinstrasse",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-franklinstrasse",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "22609081-5fe1-4b29-bbb2-cc60e72d16cd",
+        "db_name": "Notübernachtung für Frauen \"Evas Obdach\"",
+        "db_norm": "notuebernachtung fuer frauen evas obdach",
+        "kaeltehilfe_name": "Notübernachtung für Frauen \"Evas Obdach\"",
+        "kaeltehilfe_norm": "notuebernachtung fuer frauen evas obdach",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-frauen-evas-obdach",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "9a4712eb-4d30-4970-a8ef-9c875f14dce3",
+        "db_name": "Notübernachtung für Frauen „Mitten im Kiez“",
+        "db_norm": "notuebernachtung fuer frauen mitten im kiez",
+        "kaeltehilfe_name": "Notübernachtung für Frauen* ‚Mitten im Kiez‘",
+        "kaeltehilfe_norm": "notuebernachtung fuer frauen mitten im kiez",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-frauen-mitten-im-kiez",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "a337e139-3d3b-423b-b2ca-367aa49a4b96",
+        "db_name": "Notübernachtung für Frauen der Gebewo Pro gGmbH",
+        "db_norm": "notuebernachtung fuer frauen der gebewo pro ggmbh",
+        "kaeltehilfe_name": "Notübernachtung für Frauen der GEBEWO Pro gGmbH",
+        "kaeltehilfe_norm": "notuebernachtung fuer frauen der gebewo pro ggmbh",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-frauen",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "075bcd92-b3a1-409e-9626-2e04514226c8",
+        "db_name": "Notübernachtung für Wohnungslose Familien",
+        "db_norm": "notuebernachtung fuer wohnungslose familien",
+        "kaeltehilfe_name": "Notübernachtung für wohnungslose Familien",
+        "kaeltehilfe_norm": "notuebernachtung fuer wohnungslose familien",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-fuer-wohnungslose-familien-am-baerensprung",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "33bb2068-8608-4013-937a-81d654633982",
+        "db_name": "Notübernachtung Haus Sophie",
+        "db_norm": "notuebernachtung haus sophie",
+        "kaeltehilfe_name": "Notübernachtung Haus Sophie",
+        "kaeltehilfe_norm": "notuebernachtung haus sophie",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-merkur",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "44ba460d-0b18-41d4-b3c2-9c7945340f09",
+        "db_name": "Notübernachtung Herberge zur Heimat e. V.",
+        "db_norm": "notuebernachtung herberge zur heimat e v",
+        "kaeltehilfe_name": "Notübernachtung - Herberge zur Heimat e.V.",
+        "kaeltehilfe_norm": "notuebernachtung herberge zur heimat e v",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-herberge-zur-heimat-e-v",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "b0d59fff-4e3b-4a1a-a612-6d9244cc006b",
+        "db_name": "Notübernachtung Kopenhagener Straße",
+        "db_norm": "notuebernachtung kopenhagener strasse",
+        "kaeltehilfe_name": "Notübernachtung Kopenhagener Straße",
+        "kaeltehilfe_norm": "notuebernachtung kopenhagener strasse",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-kopenhagener-strasse",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "b8d36b91-c9c9-4d8c-8698-7b3742b8c10e",
+        "db_name": "Notübernachtung Kurmärkische Strasse",
+        "db_norm": "notuebernachtung kurmaerkische strasse",
+        "kaeltehilfe_name": "Notübernachtung Kurmärkische Str.1-3",
+        "kaeltehilfe_norm": "notuebernachtung kurmaerkische str 1 3",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-kurmaerkische-strasse",
+        "match_kind": "fuzzy:0.89"
+      },
+      {
+        "db_id": "c85e88e8-2760-454a-ba9c-f05ed0bf5371",
+        "db_name": "Notübernachtung Lehrter Str.",
+        "db_norm": "notuebernachtung lehrter str",
+        "kaeltehilfe_name": "Notübernachtung Lehrter Straße",
+        "kaeltehilfe_norm": "notuebernachtung lehrter strasse",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-lehrter-strasse",
+        "match_kind": "fuzzy:0.93"
+      },
+      {
+        "db_id": "6844ac72-85b7-4915-8c26-75e1e1d8d772",
+        "db_name": "Notübernachtung Neustart Berlin GmbH",
+        "db_norm": "notuebernachtung neustart berlin gmbh",
+        "kaeltehilfe_name": "Notübernachtung Neustart Berlin GmbH",
+        "kaeltehilfe_norm": "notuebernachtung neustart berlin gmbh",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-neustart-kaeltehilfe",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "b6d2b909-91e7-4939-872b-0c9066c0e060",
+        "db_name": "Notübernachtung St. Marien – Liebfrauen",
+        "db_norm": "notuebernachtung st marien liebfrauen",
+        "kaeltehilfe_name": "Notübernachtung St. Marien Liebfrauen",
+        "kaeltehilfe_norm": "notuebernachtung st marien liebfrauen",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-st-marien-liebfrauen",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "a525240b-1b9c-480e-92fd-becf229022d3",
+        "db_name": "Notübernachtung St. Pius / St. Nikolaus",
+        "db_norm": "notuebernachtung st pius st nikolaus",
+        "kaeltehilfe_name": "Notübernachtung St. Pius/ St. Nikolaus",
+        "kaeltehilfe_norm": "notuebernachtung st pius st nikolaus",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-st-pius-st-nikolaus",
+        "match_kind": "direct"
+      },
+      {
+        "db_id": "77b0533b-4ca8-4341-a867-f6df9995d185",
+        "db_name": "Notübernachtung Strassenfeger",
+        "db_norm": "notuebernachtung strassenfeger",
+        "kaeltehilfe_name": "Notübernachtung Strassenfeger e.V.",
+        "kaeltehilfe_norm": "notuebernachtung strassenfeger e v",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notuebernachtung-strassenfeger-e-v",
+        "match_kind": "tokens_ambiguous"
+      },
+      {
+        "db_id": "6f6299ab-5542-46c3-a52d-262c9c3e47e8",
+        "db_name": "Notunterkunft für Familien",
+        "db_norm": "notunterkunft fuer familien",
+        "kaeltehilfe_name": "Notunterkunft für Familien",
+        "kaeltehilfe_norm": "notunterkunft fuer familien",
+        "kaeltehilfe_url": "https://kaeltehilfe-berlin.de/kaeltehilfe-angebot/notunterkunft-fuer-wohnungslose-familien",
+        "match_kind": "direct"
+      }
+    ]
+  },
+  "unmatched": {
+    "count": 3,
+    "rows": [
+      {
+        "id": "b8c0e858-5aa9-4302-a1ec-4efb95849af7",
+        "name": "Notübernachtung und Wärmestube Arche",
+        "norm": "notuebernachtung und waermestube arche"
+      },
+      {
+        "id": "f800e727-477c-444a-b52a-1d0ad141994c",
+        "name": "Notübernachtung und Wärmestube Arche",
+        "norm": "notuebernachtung und waermestube arche"
+      },
+      {
+        "id": "c1faf883-4fbe-49db-8c60-31b8d7542376",
+        "name": "Wohnheim Neustart GmbH",
+        "norm": "wohnheim neustart gmbh"
+      }
+    ]
+  }
+}

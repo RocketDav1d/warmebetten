@@ -107,3 +107,99 @@ Please file feedback and issues over on the [Supabase GitHub org](https://github
 - [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
 - [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
 - [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+
+## Kaeltehilfe capacity sync (daily)
+
+Kaeltehilfe publishes **live categorical capacity** (traffic light) for *Notübernachtung* offers:
+- `none` (red)
+- `little` (yellow/orange)
+- `plenty` (green)
+
+We store this separately from our numeric, provider-managed `plaetze_frei_aktuell`.
+
+### DB changes
+
+Migration: `supabase/migrations/20260112000001_kaeltehilfe_capacity_status.sql`
+
+New columns on `public.unterkuenfte`:
+- `kaeltehilfe_capacity_status` (overall)
+- `kaeltehilfe_capacity_status_men`
+- `kaeltehilfe_capacity_status_women`
+- `kaeltehilfe_capacity_status_diverse`
+- `kaeltehilfe_capacity_url`
+- `kaeltehilfe_capacity_checked_at`
+- `kaeltehilfe_capacity_updated_at` (only bumps when any of the status columns changes)
+
+### Scraper
+
+Script:
+
+```bash
+python -m scripts.scrape_kaeltehilfe_capacity --commit
+```
+
+It fetches the Notübernachtung listing (`/angebote/filter/1`) and matches offers to our DB by **normalized name**, then updates only the Kaeltehilfe capacity columns.
+
+Required env vars (can be placed in `scripts/.env`):
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+### Manual match overrides (for edge-cases / duplicates)
+
+If some DB entries don't match cleanly by name (or you have duplicates), you can pin a DB row
+to a specific Kaeltehilfe offer URL via:
+
+- `scripts/kaeltehilfe_overrides.json`
+
+The scraper applies these overrides **first** (by `unterkunft_id`), then falls back to automatic matching.
+
+### Local test runs (dry-run vs commit)
+
+Dry-run (no DB writes):
+
+```bash
+bash scripts/run_kaeltehilfe_capacity.sh --limit 5
+```
+
+Commit (writes to Supabase):
+
+```bash
+bash scripts/run_kaeltehilfe_capacity.sh --limit 5 --commit
+```
+
+### Run it daily on your Mac (launchd)
+
+1) Create a venv + install deps (recommended):
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+```
+
+2) Put your secrets in `scripts/.env` (not committed):
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=...
+SUPABASE_SERVICE_ROLE_KEY=...
+```
+
+3) Create log dir:
+
+```bash
+mkdir -p tmp_logs
+```
+
+4) Install a launchd job (daily):
+
+- Copy `scripts/launchd/com.warmebetten.kaeltehilfe-capacity.plist.example` to `~/Library/LaunchAgents/com.warmebetten.kaeltehilfe-capacity.plist`
+- Replace `__REPO_ROOT__` with your repo path (e.g. `/Users/davidkorn/warmebetten`)
+- Load it:
+
+```bash
+launchctl unload -w ~/Library/LaunchAgents/com.warmebetten.kaeltehilfe-capacity.plist 2>/dev/null || true
+launchctl load -w ~/Library/LaunchAgents/com.warmebetten.kaeltehilfe-capacity.plist
+```
+
+Logs will go to `tmp_logs/kaeltehilfe_capacity.*.log`.
+

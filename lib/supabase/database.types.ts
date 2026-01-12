@@ -54,10 +54,26 @@ export type Database = {
           created_at: string
           created_by: string | null
           email: string[] | null
+          general_opening_hours: string | null
           id: string
           is_mobile: boolean
           kaelte_waerme_bus_kann_kommen_bis: string | null
           kaelte_waerme_bus_kann_kommen_von: string | null
+          kaeltehilfe_capacity_checked_at: string
+          kaeltehilfe_capacity_status:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_diverse:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_men:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_women:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_updated_at: string
+          kaeltehilfe_capacity_url: string | null
           kapazitaet_belegt: number | null
           kapazitaet_max_allgemein: number
           kapazitaet_max_frauen: number
@@ -68,7 +84,6 @@ export type Database = {
           lat: number | null
           letzter_einlass: string | null
           lng: number | null
-          general_opening_hours: string | null
           metadata: string | null
           name: string
           oeffnung_bis: string | null
@@ -99,10 +114,26 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           email?: string[] | null
+          general_opening_hours?: string | null
           id?: string
           is_mobile?: boolean
           kaelte_waerme_bus_kann_kommen_bis?: string | null
           kaelte_waerme_bus_kann_kommen_von?: string | null
+          kaeltehilfe_capacity_checked_at?: string
+          kaeltehilfe_capacity_status?:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_diverse?:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_men?:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_women?:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_updated_at?: string
+          kaeltehilfe_capacity_url?: string | null
           kapazitaet_belegt?: number | null
           kapazitaet_max_allgemein?: number
           kapazitaet_max_frauen?: number
@@ -113,7 +144,6 @@ export type Database = {
           lat?: number | null
           letzter_einlass?: string | null
           lng?: number | null
-          general_opening_hours?: string | null
           metadata?: string | null
           name: string
           oeffnung_bis?: string | null
@@ -144,10 +174,26 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           email?: string[] | null
+          general_opening_hours?: string | null
           id?: string
           is_mobile?: boolean
           kaelte_waerme_bus_kann_kommen_bis?: string | null
           kaelte_waerme_bus_kann_kommen_von?: string | null
+          kaeltehilfe_capacity_checked_at?: string
+          kaeltehilfe_capacity_status?:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_diverse?:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_men?:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_status_women?:
+            | Database["public"]["Enums"]["kaeltehilfe_capacity_status"]
+            | null
+          kaeltehilfe_capacity_updated_at?: string
+          kaeltehilfe_capacity_url?: string | null
           kapazitaet_belegt?: number | null
           kapazitaet_max_allgemein?: number
           kapazitaet_max_frauen?: number
@@ -158,7 +204,6 @@ export type Database = {
           lat?: number | null
           letzter_einlass?: string | null
           lng?: number | null
-          general_opening_hours?: string | null
           metadata?: string | null
           name?: string
           oeffnung_bis?: string | null
@@ -312,6 +357,7 @@ export type Database = {
         | "marzahn_hellersdorf"
         | "lichtenberg"
         | "reinickendorf"
+      kaeltehilfe_capacity_status: "none" | "little" | "plenty"
       unterkunft_application_status: "pending" | "approved" | "rejected"
       unterkunft_submission_status:
         | "draft"
@@ -470,6 +516,7 @@ export const Constants = {
         "lichtenberg",
         "reinickendorf",
       ],
+      kaeltehilfe_capacity_status: ["none", "little", "plenty"],
       unterkunft_application_status: ["pending", "approved", "rejected"],
       unterkunft_submission_status: [
         "draft",
