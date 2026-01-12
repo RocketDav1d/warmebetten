@@ -34,7 +34,7 @@ export function MobileOffersIsland({ unterkuenfte }: { unterkuenfte: UnterkunftF
   if (unterkuenfte.length === 0) return null;
 
   return (
-    <Card className="pointer-events-auto w-[calc(100vw-1.5rem)] sm:w-[360px] max-h-[40dvh] overflow-auto bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70 shadow-lg">
+    <Card className="pointer-events-auto w-[calc(100vw-1.5rem)] sm:w-[420px] md:w-[460px] max-h-[40dvh] overflow-auto bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70 shadow-lg">
       <CardHeader className="space-y-1">
         <CardTitle className="text-base leading-none">🚙 Mobile Angebote</CardTitle>
         <div className="text-xs text-muted-foreground">{unterkuenfte.length} Einträge</div>
