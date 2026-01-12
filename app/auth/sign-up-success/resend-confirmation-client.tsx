@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,14 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export function ResendConfirmationClient({ initialEmail }: { initialEmail?: string | null }) {
-  const searchParams = useSearchParams();
   const supabase = useMemo(() => createClient(), []);
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => setIsMounted(true), []);
-
-  const urlEmail = isMounted ? searchParams.get("email") : null;
-  const prefilledEmail = (initialEmail ?? urlEmail ?? "").trim();
+  const prefilledEmail = (initialEmail ?? "").trim();
 
   // Only used when there's no email available via props/URL.
   const [email, setEmail] = useState("");
@@ -48,7 +42,7 @@ export function ResendConfirmationClient({ initialEmail }: { initialEmail?: stri
 
   return (
     <div className="mt-4 space-y-3">
-      {isMounted && !prefilledEmail ? (
+      {!prefilledEmail ? (
         <div className="space-y-2">
           <Label htmlFor="resendEmail">E‑Mail</Label>
           <Input
