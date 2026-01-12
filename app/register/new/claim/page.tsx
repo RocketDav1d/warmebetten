@@ -11,8 +11,8 @@ export default function RegisterNewShelterClaimPage({
   const submissionId = searchParams?.submissionId ?? null;
 
   return (
-    <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
-      <div className="w-full max-w-xl space-y-4">
+    <div className="flex min-h-svh w-full items-start justify-center px-4 py-6 sm:px-6 sm:py-10">
+      <div className="w-full max-w-xl space-y-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">Einreichung abschließen</CardTitle>
@@ -22,7 +22,7 @@ export default function RegisterNewShelterClaimPage({
           </CardContent>
         </Card>
 
-        <div className="text-xs text-muted-foreground">
+        <div className="text-sm text-muted-foreground sm:text-xs">
           Zurück:{" "}
           <Link className="underline underline-offset-4" href="/register">
             /register
