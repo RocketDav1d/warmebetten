@@ -9,6 +9,8 @@ import { ExternalLink, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Database } from "@/lib/supabase/database.types";
 import { deriveKaeltehilfeStatus, kaeltehilfeStatusLabel } from "@/lib/unterkunft/kaeltehilfe";
+import { googleMapsDirectionsHref, normalizeWebsiteUrl } from "@/lib/unterkunft/links";
+import { useCanHover } from "@/components/map/use-can-hover";
 
 type UnterkunftRow = Database["public"]["Tables"]["unterkuenfte"]["Row"];
 
@@ -101,13 +103,6 @@ function formatUpdatedAt(value: string | null) {
   }
 }
 
-function normalizeWebsiteUrl(url: string) {
-  const s = url.trim();
-  if (!s) return "";
-  if (/^https?:\/\//i.test(s)) return s;
-  return `https://${s}`;
-}
-
 function MarkerPopupCard({
   name,
   statusLine,
@@ -167,6 +162,10 @@ export function UnterkuenfteLayer({
   const { resolvedTheme } = useTheme();
   const neutralBg = resolvedTheme === "dark" ? "#ffffff" : "#000000";
 
+  // IMPORTANT: Only show hover tooltips on devices that can actually hover.
+  // This prevents touch browsers from emulating mouseenter/mouseleave and breaking gestures.
+  const canHover = useCanHover(true);
+
   const withCoords = useMemo(
     () => unterkuenfte.filter((u) => u.lat != null && u.lng != null),
     [unterkuenfte]
@@ -186,9 +185,10 @@ export function UnterkuenfteLayer({
           ? formatUpdatedAt(u.kaeltehilfe_capacity_updated_at ?? null)
           : null;
 
-        const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-          `${u.lat},${u.lng}`,
-        )}`;
+        const directionsHref = googleMapsDirectionsHref({
+          lat: u.lat as number,
+          lng: u.lng as number,
+        });
         const websiteHref = u.website ? normalizeWebsiteUrl(u.website) : "";
 
         return (
@@ -217,18 +217,20 @@ export function UnterkuenfteLayer({
               </div>
             </MarkerContent>
 
-            {/* Hover popup (interactive actions) */}
-            <MarkerTooltip offset={18} interactive>
-              <MarkerPopupCard
-                name={u.name}
-                statusLine={statusLine}
-                updated={updated}
-                adresse={u.adresse}
-                isMobile={Boolean(u.is_mobile)}
-                directionsHref={directionsHref}
-                websiteHref={websiteHref}
-              />
-            </MarkerTooltip>
+            {/* Hover popup (interactive actions) — desktop only */}
+            {canHover && (
+              <MarkerTooltip offset={18} interactive>
+                <MarkerPopupCard
+                  name={u.name}
+                  statusLine={statusLine}
+                  updated={updated}
+                  adresse={u.adresse}
+                  isMobile={Boolean(u.is_mobile)}
+                  directionsHref={directionsHref}
+                  websiteHref={websiteHref}
+                />
+              </MarkerTooltip>
+            )}
           </MapMarker>
         );
       })}

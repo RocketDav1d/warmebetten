@@ -6,9 +6,11 @@ import { useSearchParams } from "next/navigation";
 import { Map, MapControls } from "@/components/ui/map";
 import { UnterkuenfteLayer, type UnterkunftForMap } from "@/components/map/unterkuenfte-layer";
 import { UnterkunftDetailsIsland } from "@/components/map/unterkunft-details-island";
+import { UnterkunftDetailsIslandMobile } from "@/components/map/unterkunft-details-island-mobile";
 import { applyMapFilters, filtersFromSearchParams } from "@/components/map/filters";
 import { BezirkeLayer } from "@/components/map/bezirke-layer";
 import { MobileOffersIsland } from "@/components/map/mobile-offers-island";
+import { useCanHover } from "@/components/map/use-can-hover";
 
 const BERLIN_CENTER: [number, number] = [13.405, 52.52];
 const BERLIN_BOUNDS: [[number, number], [number, number]] = [
@@ -23,6 +25,7 @@ const BERLIN_BOUNDS: [[number, number], [number, number]] = [
 export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const searchParams = useSearchParams();
+  const canHover = useCanHover(true);
 
   const filters = useMemo(
     () => filtersFromSearchParams(new URLSearchParams(searchParams.toString())),
@@ -81,12 +84,18 @@ export function BerlinMap({ unterkuenfte }: { unterkuenfte: UnterkunftForMap[] }
 
       {selected && (
         <div className="pointer-events-none absolute inset-0 z-10 p-3 sm:p-4">
-          <div className="pointer-events-auto absolute right-3 top-3 sm:right-4 sm:top-4">
-            <UnterkunftDetailsIsland
-              unterkunft={selected}
-              onClose={() => setSelectedId(null)}
-            />
-          </div>
+          {canHover ? (
+            <div className="pointer-events-auto absolute right-3 top-3 sm:right-4 sm:top-4">
+              <UnterkunftDetailsIsland unterkunft={selected} onClose={() => setSelectedId(null)} />
+            </div>
+          ) : (
+            <div className="pointer-events-auto absolute bottom-3 left-3 right-3">
+              <UnterkunftDetailsIslandMobile
+                unterkunft={selected}
+                onClose={() => setSelectedId(null)}
+              />
+            </div>
+          )}
         </div>
       )}
     </Map>
