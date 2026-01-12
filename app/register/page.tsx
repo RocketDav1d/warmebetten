@@ -12,14 +12,14 @@ import { RegisterProviderForm } from "@/components/register-provider-form";
 export default function RegisterPage() {
   if (!hasEnvVars) {
     return (
-      <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
-        <div className="w-full max-w-3xl space-y-4">
+      <div className="flex min-h-svh w-full items-start justify-center px-4 py-6 sm:px-6 sm:py-10">
+        <div className="w-full max-w-3xl space-y-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
           <Card>
             <CardHeader className="space-y-2">
               <CardTitle className="text-xl">Betreiber-Registrierung</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+              <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm leading-relaxed text-muted-foreground">
                 Supabase ist noch nicht konfiguriert. Setze{" "}
                 <code>NEXT_PUBLIC_SUPABASE_URL</code> und{" "}
                 <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code> (oder{" "}
@@ -28,7 +28,7 @@ export default function RegisterPage() {
               </div>
             </CardContent>
           </Card>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-sm text-muted-foreground sm:text-xs">
             Zurück zur Karte:{" "}
             <Link className="underline underline-offset-4" href="/">
               warmebetten.berlin
@@ -48,8 +48,8 @@ export default function RegisterPage() {
 
 function RegisterPageSkeleton() {
   return (
-    <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
-      <div className="w-full max-w-3xl space-y-4">
+    <div className="flex min-h-svh w-full items-start justify-center px-4 py-6 sm:px-6 sm:py-10">
+      <div className="w-full max-w-3xl space-y-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
         <Card>
           <CardHeader className="space-y-2">
             <Skeleton className="h-6 w-64" />
@@ -69,7 +69,7 @@ function RegisterPageSkeleton() {
           </CardContent>
         </Card>
 
-        <div className="text-xs text-muted-foreground">
+        <div className="text-sm text-muted-foreground sm:text-xs">
           <Skeleton className="h-3 w-40" />
         </div>
       </div>
@@ -119,15 +119,15 @@ async function RegisterPageContent() {
   }
 
   return (
-    <div className="flex min-h-svh w-full items-start justify-center p-6 md:p-10">
-      <div className="w-full max-w-3xl space-y-4">
+    <div className="flex min-h-svh w-full items-start justify-center px-4 py-6 sm:px-6 sm:py-10">
+      <div className="w-full max-w-3xl space-y-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
         <Card>
           <CardHeader className="space-y-2">
             <CardTitle className="text-xl">Betreiber-Registrierung</CardTitle>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               Wenn du Betreiber bist: wähle zuerst deine Unterkunft aus und registriere dich anschließend.
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               Wenn deine E‑Mail-Adresse für diese Unterkunft freigeschaltet ist,
               wird die Verbindung direkt erstellt. Andernfalls landet deine Anfrage
               zur Freischaltung beim Admin.
@@ -145,11 +145,11 @@ async function RegisterPageContent() {
                     {whitelistWarning}
                   </div>
                 )}
-                <div className="flex items-center justify-between gap-3">
-                  <div className="text-sm text-muted-foreground">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="text-sm leading-relaxed text-muted-foreground">
                     Oder: neue Unterkunft einreichen (Admin-Freigabe erforderlich)
                   </div>
-                  <Button asChild variant="outline" size="sm">
+                  <Button asChild variant="outline" className="w-full sm:w-auto">
                     <Link href="/register/new">Neue Unterkunft hinzufügen</Link>
                   </Button>
                 </div>
@@ -159,7 +159,7 @@ async function RegisterPageContent() {
           </CardContent>
         </Card>
 
-        <div className="text-xs text-muted-foreground">
+        <div className="text-sm text-muted-foreground sm:text-xs">
           Zurück zur Karte:{" "}
           <Link className="underline underline-offset-4" href="/">
             warmebetten.berlin
