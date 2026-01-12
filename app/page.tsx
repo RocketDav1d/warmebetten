@@ -15,7 +15,7 @@ export default async function Home() {
     if (!url || !key) return [];
 
     const select =
-      "id,name,is_mobile,adresse,bezirk,typ,lat,lng,betten_frei,plaetze_frei_aktuell,kapazitaet_max_allgemein,capacity_updated_at,telefon,email,website,oeffnung_von,oeffnung_bis,letzter_einlass,bietet_dusche,bietet_essen,bietet_betreuung,bietet_kleidung,bietet_medizin,behindertengerecht";
+      "id,name,is_mobile,adresse,bezirk,typ,lat,lng,kaeltehilfe_capacity_status,kaeltehilfe_capacity_status_men,kaeltehilfe_capacity_status_women,kaeltehilfe_capacity_status_diverse,kaeltehilfe_capacity_url,kaeltehilfe_capacity_checked_at,kaeltehilfe_capacity_updated_at,telefon,email,website,oeffnung_von,oeffnung_bis,letzter_einlass,bietet_dusche,bietet_essen,bietet_betreuung,bietet_kleidung,bietet_medizin,behindertengerecht";
 
     const params = new URLSearchParams({
       select,

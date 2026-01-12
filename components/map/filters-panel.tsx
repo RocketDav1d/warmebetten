@@ -264,17 +264,19 @@ export function FiltersPanel() {
       </div>
 
       <div className="space-y-2">
-        <div className="text-sm font-medium">Betten frei</div>
+        <div className="text-sm font-medium">Kapazität (live)</div>
         <div className="grid grid-cols-1 gap-2">
           {[
             { value: "any" as const, label: "Alle" },
-            { value: "free" as const, label: "Nur mit freien Betten" },
-            { value: "full" as const, label: "Nur voll" },
+            { value: "plenty" as const, label: "Grün · Viele Plätze" },
+            { value: "little" as const, label: "Orange · Wenige Plätze" },
+            { value: "none" as const, label: "Rot · Keine Plätze" },
+            { value: "unknown" as const, label: "Unbekannt" },
           ].map((opt) => (
             <label key={opt.value} className="flex items-center gap-2">
               <Checkbox
-                checked={filters.bettenFrei === opt.value}
-                onCheckedChange={() => commit({ ...filters, bettenFrei: opt.value })}
+                checked={filters.capacity === opt.value}
+                onCheckedChange={() => commit({ ...filters, capacity: opt.value })}
               />
               <span className="text-sm">{opt.label}</span>
             </label>

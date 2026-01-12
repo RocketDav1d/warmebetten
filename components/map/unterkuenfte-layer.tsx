@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Database } from "@/lib/supabase/database.types";
+import { deriveKaeltehilfeStatus, kaeltehilfeStatusLabel } from "@/lib/unterkunft/kaeltehilfe";
 
 type UnterkunftRow = Database["public"]["Tables"]["unterkuenfte"]["Row"];
 
@@ -21,10 +22,13 @@ export type UnterkunftForMap = Pick<
   | "typ"
   | "lat"
   | "lng"
-  | "betten_frei"
-  | "plaetze_frei_aktuell"
-  | "kapazitaet_max_allgemein"
-  | "capacity_updated_at"
+  | "kaeltehilfe_capacity_status"
+  | "kaeltehilfe_capacity_status_men"
+  | "kaeltehilfe_capacity_status_women"
+  | "kaeltehilfe_capacity_status_diverse"
+  | "kaeltehilfe_capacity_url"
+  | "kaeltehilfe_capacity_checked_at"
+  | "kaeltehilfe_capacity_updated_at"
   | "telefon"
   | "email"
   | "website"
@@ -60,19 +64,26 @@ function getTypeMeta(typ: UnterkunftTyp) {
   return { label: "Unterkunft", emoji: "📍", color: "#64748b" }; // slate
 }
 
-function getAvailabilityStyle(bettenFrei: boolean | null, shouldColor: boolean) {
-  if (!shouldColor || bettenFrei == null) {
-    return { glow: undefined as string | undefined };
-  }
-  if (bettenFrei === true) {
+function kaeltehilfeMarkerStyle(status: ReturnType<typeof deriveKaeltehilfeStatus>) {
+  if (status === "plenty") {
     return {
+      bg: "#22c55e", // green-500
       glow: "0 0 0 6px rgba(34, 197, 94, 0.22), 0 0 22px rgba(34, 197, 94, 0.55)",
     };
   }
-  return {
-    // "No free places" should not be alarming-red; render as warm orange.
-    glow: "0 0 0 6px rgba(249, 115, 22, 0.22), 0 0 22px rgba(249, 115, 22, 0.55)",
-  };
+  if (status === "little") {
+    return {
+      bg: "#f97316", // orange-500
+      glow: "0 0 0 6px rgba(249, 115, 22, 0.22), 0 0 22px rgba(249, 115, 22, 0.55)",
+    };
+  }
+  if (status === "none") {
+    return {
+      bg: "#ef4444", // red-500
+      glow: "0 0 0 6px rgba(239, 68, 68, 0.22), 0 0 22px rgba(239, 68, 68, 0.55)",
+    };
+  }
+  return { bg: undefined as string | undefined, glow: undefined as string | undefined };
 }
 
 function formatUpdatedAt(value: string | null) {
@@ -155,7 +166,6 @@ export function UnterkuenfteLayer({
 }) {
   const { resolvedTheme } = useTheme();
   const neutralBg = resolvedTheme === "dark" ? "#ffffff" : "#000000";
-  const fullBg = "#f97316"; // orange-500
 
   const withCoords = useMemo(
     () => unterkuenfte.filter((u) => u.lat != null && u.lng != null),
@@ -166,33 +176,15 @@ export function UnterkuenfteLayer({
     <>
       {withCoords.map((u) => {
         const meta = getTypeMeta(u.typ);
-        const kapMax = (u as any).kapazitaet_max_allgemein as number | null | undefined;
-        // In the current schema this field is NOT NULL (default 0),
-        // so we treat "> 0" as "capacity is relevant for this entry".
-        const canHaveCapacity = typeof kapMax === "number" ? kapMax > 0 : false;
+        const isNotuebernachtung = u.typ === "notuebernachtung";
+        const status = isNotuebernachtung ? deriveKaeltehilfeStatus(u) : null;
+        const style = kaeltehilfeMarkerStyle(status);
+        const markerBg = style.bg ?? neutralBg;
 
-        // If betten_frei is NULL, we treat it as "no current capacity data".
-        const hasCapacityData = canHaveCapacity && u.betten_frei != null;
-
-        const availability = getAvailabilityStyle(u.betten_frei, hasCapacityData);
-        const markerBg =
-          hasCapacityData && u.betten_frei === false ? fullBg : neutralBg;
-
-        const free = hasCapacityData
-          ? typeof u.plaetze_frei_aktuell === "number"
-            ? u.plaetze_frei_aktuell
-            : null
+        const statusLine = isNotuebernachtung ? kaeltehilfeStatusLabel(status) : meta.label;
+        const updated = isNotuebernachtung
+          ? formatUpdatedAt(u.kaeltehilfe_capacity_updated_at ?? null)
           : null;
-
-        const statusLine = !canHaveCapacity
-          ? meta.label
-          : !hasCapacityData
-            ? "Kapazität unbekannt"
-            : free != null && free > 0
-              ? `${free} frei`
-              : "Keine freien Plätze";
-
-        const updated = hasCapacityData ? formatUpdatedAt(u.capacity_updated_at ?? null) : null;
 
         const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
           `${u.lat},${u.lng}`,
@@ -216,7 +208,7 @@ export function UnterkuenfteLayer({
                 className="h-8 w-8 rounded-full flex items-center justify-center"
                 style={{
                   background: markerBg,
-                  boxShadow: availability.glow,
+                  boxShadow: style.glow,
                 }}
                 aria-label={meta.label}
                 role="img"

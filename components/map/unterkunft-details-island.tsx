@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { UnterkunftForMap } from "@/components/map/unterkuenfte-layer";
+import { deriveKaeltehilfeStatus, kaeltehilfeStatusLabel } from "@/lib/unterkunft/kaeltehilfe";
+import { formatBezirk } from "@/lib/unterkunft/meta";
 
 function formatTimeRange(from: string | null, to: string | null) {
   if (!from && !to) return null;
@@ -46,34 +48,29 @@ export function UnterkunftDetailsIsland({
   unterkunft: UnterkunftForMap;
   onClose: () => void;
 }) {
-  const kapMax = (unterkunft as any).kapazitaet_max_allgemein as number | null | undefined;
-  const canHaveCapacity = typeof kapMax === "number" ? kapMax > 0 : false;
-  const hasCapacityData = canHaveCapacity && unterkunft.betten_frei != null;
-
-  const free = hasCapacityData
-    ? typeof unterkunft.plaetze_frei_aktuell === "number"
-      ? unterkunft.plaetze_frei_aktuell
-      : null
-    : null;
+  const isNotuebernachtung = unterkunft.typ === "notuebernachtung";
+  const kaeltehilfeStatus = isNotuebernachtung ? deriveKaeltehilfeStatus(unterkunft) : null;
 
   const timeRange = formatTimeRange(
     unterkunft.oeffnung_von,
     unterkunft.oeffnung_bis
   );
 
-  const capacityUpdated = (() => {
-    try {
-      return new Date(unterkunft.capacity_updated_at).toLocaleString("de-DE", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    } catch {
-      return unterkunft.capacity_updated_at;
-    }
-  })();
+  const capacityUpdated = isNotuebernachtung
+    ? (() => {
+        try {
+          return new Date(unterkunft.kaeltehilfe_capacity_updated_at).toLocaleString("de-DE", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        } catch {
+          return unterkunft.kaeltehilfe_capacity_updated_at;
+        }
+      })()
+    : null;
 
   const offers: { key: string; label: string }[] = [
     unterkunft.bietet_essen ? { key: "essen", label: "Essen" } : null,
@@ -94,7 +91,7 @@ export function UnterkunftDetailsIsland({
             </CardTitle>
             <div className="text-xs text-muted-foreground">
               {typeLabel(unterkunft.typ)}
-              {unterkunft.bezirk ? ` · ${unterkunft.bezirk}` : ""}
+              {unterkunft.bezirk ? ` · ${formatBezirk(unterkunft.bezirk)}` : ""}
             </div>
           </div>
           <Button
@@ -109,13 +106,21 @@ export function UnterkunftDetailsIsland({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {hasCapacityData && free != null && (
-            <Badge variant={free > 0 ? "default" : "secondary"}>
-              {free > 0 ? `${free} Plätze frei` : "Keine Plätze frei"}
+          {isNotuebernachtung && (
+            <Badge
+              variant={kaeltehilfeStatus == null ? "outline" : "secondary"}
+              className={
+                kaeltehilfeStatus === "plenty"
+                  ? "bg-green-500/15 text-green-700 dark:text-green-300 border-green-500/30"
+                  : kaeltehilfeStatus === "little"
+                    ? "bg-orange-500/15 text-orange-700 dark:text-orange-300 border-orange-500/30"
+                    : kaeltehilfeStatus === "none"
+                      ? "bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/30"
+                      : undefined
+              }
+            >
+              {kaeltehilfeStatusLabel(kaeltehilfeStatus)}
             </Badge>
-          )}
-          {canHaveCapacity && !hasCapacityData && (
-            <Badge variant="outline">Kapazität unbekannt</Badge>
           )}
           {unterkunft.is_mobile ? (
             <Badge variant="outline">Mobil</Badge>
@@ -126,12 +131,25 @@ export function UnterkunftDetailsIsland({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {canHaveCapacity && (
+        {isNotuebernachtung && (
           <div className="space-y-1">
-            <div className="text-sm font-semibold">Kapazität</div>
+            <div className="text-sm font-semibold">Kapazität (live)</div>
             <div className="text-sm text-muted-foreground">
-              Aktualisiert: {hasCapacityData ? capacityUpdated : "—"}
+              Aktualisiert: {capacityUpdated ?? "—"}
             </div>
+            {unterkunft.kaeltehilfe_capacity_url && (
+              <div className="text-xs text-muted-foreground">
+                Quelle:{" "}
+                <a
+                  className="underline underline-offset-4"
+                  href={unterkunft.kaeltehilfe_capacity_url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  kaeltehilfe-berlin.de
+                </a>
+              </div>
+            )}
           </div>
         )}
 

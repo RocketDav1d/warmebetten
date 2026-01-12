@@ -4,17 +4,18 @@ import {
   type UnterkunftTyp,
 } from "@/lib/unterkunft/meta";
 import type { UnterkunftForMap } from "@/components/map/unterkuenfte-layer";
+import { deriveKaeltehilfeStatus } from "@/lib/unterkunft/kaeltehilfe";
 
 export type { BerlinBezirk, UnterkunftTyp } from "@/lib/unterkunft/meta";
 export { BEZIRK_LABELS } from "@/lib/unterkunft/meta";
 
-export type BettenFreiFilter = "any" | "free" | "full";
+export type CapacityFilter = "any" | "plenty" | "little" | "none" | "unknown";
 
 export type MapFilters = {
   q: string;
   typ: UnterkunftTyp[];
   bezirk: BerlinBezirk[];
-  bettenFrei: BettenFreiFilter;
+  capacity: CapacityFilter;
   openFrom: string; // "HH:MM" or ""
   openTo: string; // "HH:MM" or ""
   showMobile: boolean;
@@ -31,7 +32,7 @@ export const DEFAULT_FILTERS: MapFilters = {
   q: "",
   typ: [],
   bezirk: [],
-  bettenFrei: "any",
+  capacity: "any",
   openFrom: "",
   openTo: "",
   showMobile: false,
@@ -111,9 +112,11 @@ function coversInterval(
 
 export function filtersFromSearchParams(sp: URLSearchParams): MapFilters {
   const q = sp.get("q") ?? "";
-  const betten = (sp.get("betten") as BettenFreiFilter | null) ?? "any";
-  const bettenFrei: BettenFreiFilter =
-    betten === "free" || betten === "full" || betten === "any" ? betten : "any";
+  const cap = (sp.get("cap") as CapacityFilter | null) ?? "any";
+  const capacity: CapacityFilter =
+    cap === "any" || cap === "plenty" || cap === "little" || cap === "none" || cap === "unknown"
+      ? cap
+      : "any";
 
   const openFrom = sp.get("openFrom") ?? "";
   const openTo = sp.get("openTo") ?? "";
@@ -133,7 +136,7 @@ export function filtersFromSearchParams(sp: URLSearchParams): MapFilters {
   return {
     ...DEFAULT_FILTERS,
     q,
-    bettenFrei,
+    capacity,
     openFrom,
     openTo,
     showMobile,
@@ -148,7 +151,7 @@ export function searchParamsFromFilters(filters: MapFilters): URLSearchParams {
   // Don't trim here: trimming while the user is typing prevents entering spaces
   // (e.g. "foo " gets immediately coerced back to "foo" before you can type "bar").
   if (filters.q.length > 0) sp.set("q", filters.q);
-  if (filters.bettenFrei !== "any") sp.set("betten", filters.bettenFrei);
+  if (filters.capacity !== "any") sp.set("cap", filters.capacity);
   if (filters.openFrom) sp.set("openFrom", filters.openFrom);
   if (filters.openTo) sp.set("openTo", filters.openTo);
   if (filters.showMobile) sp.set("mobile", "1");
@@ -190,9 +193,17 @@ export function applyMapFilters(
     if (filters.bezirk.length && (!u.bezirk || !filters.bezirk.includes(u.bezirk)))
       return false;
 
-    // betten_frei
-    if (filters.bettenFrei === "free" && u.betten_frei !== true) return false;
-    if (filters.bettenFrei === "full" && u.betten_frei !== false) return false;
+    // Kaeltehilfe capacity (traffic light).
+    // Only Notübernachtung entries participate in this.
+    if (filters.capacity !== "any") {
+      if (u.typ !== "notuebernachtung") return false;
+      const derived = deriveKaeltehilfeStatus(u);
+      if (filters.capacity === "unknown") {
+        if (derived != null) return false;
+      } else {
+        if (derived !== filters.capacity) return false;
+      }
+    }
 
     // bietet_* offers (AND)
     if (filters.offers.bietet_essen && u.bietet_essen !== true) return false;
